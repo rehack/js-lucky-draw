@@ -128,55 +128,6 @@ window.onload=function(){
                 // statements_def
                 break;
         }
-        /*switch (lunItem) {
-            case 1:
-                lunNum=20;
-                numHtml='三等奖第一轮(旅游杯)';
-                break;
-            case 2:
-                lunNum=20;
-                numHtml='三等奖第二轮(旅游杯)';
-                break;
-            case 3:
-                lunNum=20;
-                numHtml='三等奖第三轮(旅游杯)';
-                break;
-            case 4:
-                lunNum=10;
-                numHtml='二等奖第一轮(豆芽机)';
-                break;
-            case 5:
-                lunNum=10;
-                numHtml='二等奖第二轮(豆芽机)';
-                break;
-            case 6:
-                lunNum=10;
-                numHtml='二等奖第三轮(豆芽机)';
-                break;
-            case 7:
-                lunNum=1;
-                numHtml='一等奖第一轮(iPhone7 Plus)';
-                break;
-            case 8:
-                lunNum=1;
-                numHtml='一等奖第二轮(iPhone7 Plus)';
-                break;
-            case 9:
-                lunNum=1;
-                numHtml='一等奖第三轮(iPhone7 Plus)';
-                break;
-            case 10:
-                lunNum=1;
-                numHtml='特等奖第一轮(免费种植名额)';
-                break;
-            case 11:
-                lunNum=1;
-                numHtml='特等奖第二轮(免费矫正名额)';
-                break;
-            default:
-                // statements_def
-                break;
-        }*/
     }
 
     //
