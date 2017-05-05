@@ -15,7 +15,7 @@ class Lucky{
     }
 
     init(){
-        this.getLocalStorage(this.turn);
+        this.getLocalStorage(this.turn);//刷新页面，从localStoreage中恢复
         // console.log(this.getLocalStorage())
         document.onkeyup=(e)=>{
             let oEvent=e||window.event;//let在当前作用域内有用，未声明前不可用，不可重复声明
