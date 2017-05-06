@@ -1,5 +1,6 @@
 /**
  * ES6类的使用
+ * 用到了构造器、箭头函数、新字符串连接语法`${}`、
  */
 class Lucky{
     constructor(startNum,endNum,numPwrap,totalTurns){
@@ -16,7 +17,6 @@ class Lucky{
         this.timer=null;//定时器
         this.oLocalStorage=window.localStorage;//本地存储对象
         this.turn=1;//97->1 98->2 ... 抽奖轮次编号 按左右方向键进行切换
-        // this._d=this.d();
         this.d=0;//中奖号码滚动位置
     }
 
@@ -48,34 +48,20 @@ class Lucky{
                  console.log('停止')
             }
 
-            // 左右切换抽奖轮次
-            if(oEvent.keyCode==37){
-                // 左切换
-                this.turn-=1;
-                if(this.turn==0){
-                    this.turn=this.totalTurns;
-                }
-                this.fill();
-            }else if(oEvent.keyCode==39){
-                // 右切换
-                this.turn+=1;
-                if(this.turn>this.totalTurns){
-                    this.turn=1;
-                }
-                this.fill();
-            }
-
+            // 左右方向键切换抽奖轮次，Esc清除localStorage
             switch (oEvent.keyCode) {
-                case 97:
-                    this.turn=1;
+                case 37:
+                    this.turn-=1;
+                    if(this.turn==0){
+                        this.turn=this.totalTurns;
+                    }
                     this.fill();
                     break;
-                case 98:
-                    this.turn=2;
-                    this.fill();
-                    break;
-                case 99:
-                    this.turn=3;
+                case 39:
+                    this.turn+=1;
+                    if(this.turn>this.totalTurns){
+                        this.turn=1;
+                    }
                     this.fill();
                     break;
                 case 27:
@@ -127,11 +113,7 @@ class Lucky{
         clearInterval(this.timer);//清除之前的定时器
         console.log('this.numWrap子节点个数：'+this.numWrap.length);
         let oNode=document.createElement('b');
-
-
         this.playRuningMusic();//同时播放音效
-
-
 
         if(this.numWrap.length==0 || this.numWrap.length==this.digits){//当此没有子节点或者子节点已经全部显示 的时候才进行抽取
 
@@ -147,10 +129,7 @@ class Lucky{
             this.luckyNum=this.getLucky();//
             this.removeLuckyNum(this.luckyNum);//移除已经中奖的号码
             console.log('allList：'+this.allList)
-
             this.saveLuckyNum(this.luckyNum);//存储
-
-
         }else{
 
             this.numPwrap.appendChild(oNode);
@@ -160,10 +139,7 @@ class Lucky{
             },50)
 
             this.luckyNum=this.luckyNum;
-            // console.log('中奖号码 local：'+this.luckyNum);
-            // this.numPwrap.innerHTML='';
         }
-
 
     }
 
@@ -172,7 +148,6 @@ class Lucky{
         // 移除b节点
         let b=this.numPwrap.getElementsByTagName('b')[0];
         if(b){
-
             this.numPwrap.removeChild(b);
         }
 
@@ -183,7 +158,7 @@ class Lucky{
 
         if(this.numWrap.length<this.digits){
 
-            this.numPwrap.innerHTML+='<span class="num">'+aLuckyNum[this.d]+'</span>';
+            this.numPwrap.innerHTML+=`<span class="num">${aLuckyNum[this.d]}</span>`;
         }else{
 
         }
@@ -211,7 +186,7 @@ class Lucky{
         if(!this.oLocalStorage[this.turn]){//如果次轮抽奖结果没有存储就进行存储
             this.oLocalStorage.setItem(this.turn,num);
         }else{
-            this.oLocalStorage.setItem(this.turn,this.getLocalStorage(this.turn)+'、'+num);
+            this.oLocalStorage.setItem(this.turn,`${this.getLocalStorage(this.turn)}、${num}`);
         }
     }
 
@@ -225,14 +200,14 @@ class Lucky{
 
     // 将中奖号码填充到页面
     fill(){
-        this.turnsWrap.innerHTML='第'+this.turn+'轮';
+        this.turnsWrap.innerHTML=`第${this.turn}轮`;
         this.numPwrap.innerHTML='';
         this.d=0;
         if(this.getLocalStorage(this.turn) && this.numWrap.length==0){
             // this.numPwrap.innerHTML='';
             let aLuckyNum=this.getLocalStorage(this.turn).split('');//将中奖号码进行分割成数组
             for(let i=0 ;i<aLuckyNum.length;i++){
-                this.numPwrap.innerHTML='<span class="show">恭喜本轮中奖号码：'+this.getLocalStorage(this.turn)+'</span>';
+                this.numPwrap.innerHTML=`<span class="show">恭喜本轮中奖号码：${this.getLocalStorage(this.turn)}</span>`;
             }
         }else{
 
