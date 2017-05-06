@@ -1,3 +1,6 @@
+/**
+ * ES6类的使用
+ */
 class Lucky{
     constructor(startNum,endNum,numPwrap,totalTurns){
         this.startNum=startNum;//参与抽奖的起始号码
