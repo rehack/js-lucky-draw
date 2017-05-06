@@ -217,9 +217,6 @@ class Lucky{
 }
 
 
-
-
-
 window.onload=function(){
     if(window.localStorage){
         var localsObj=window.localStorage;
