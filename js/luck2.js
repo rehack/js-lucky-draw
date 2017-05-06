@@ -208,7 +208,7 @@ class Lucky{
         if(!this.oLocalStorage[this.turn]){//如果次轮抽奖结果没有存储就进行存储
             this.oLocalStorage.setItem(this.turn,num);
         }else{
-            this.oLocalStorage.setItem(this.turn,this.getLocalStorage(this.turn)+','+num);
+            this.oLocalStorage.setItem(this.turn,this.getLocalStorage(this.turn)+'、'+num);
         }
     }
 
@@ -226,10 +226,10 @@ class Lucky{
         this.numPwrap.innerHTML='';
         this.d=0;
         if(this.getLocalStorage(this.turn) && this.numWrap.length==0){
-            this.numPwrap.innerHTML='';
+            // this.numPwrap.innerHTML='';
             let aLuckyNum=this.getLocalStorage(this.turn).split('');//将中奖号码进行分割成数组
             for(let i=0 ;i<aLuckyNum.length;i++){
-                this.numPwrap.innerHTML='<span>'++'</span>'+this.getLocalStorage(this.turn);
+                this.numPwrap.innerHTML='<span class="show">恭喜本轮中奖号码：'+this.getLocalStorage(this.turn)+'</span>';
             }
         }else{
 
