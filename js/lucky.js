@@ -227,7 +227,7 @@ window.onload=function(){
     }
 
 
-    let lucky=new Lucky(1,90,'get_num',8);
+    let lucky=new Lucky(1,100,'get_num',8);
     lucky.init();
 
 }
