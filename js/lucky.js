@@ -48,8 +48,8 @@ class Lucky{
                  console.log('停止')
             }
 
-            // 左右方向键切换抽奖轮次，Esc清除localStorage
-            switch (oEvent.keyCode) {
+            // 左右方向键切换抽奖轮次，Ctrl + z清除localStorage
+            switch (oEvent.keyCode || oEvent.ctrlKey ) {
                 case 37:
                     this.turn-=1;
                     if(this.turn==0){
@@ -64,7 +64,8 @@ class Lucky{
                     }
                     this.fill();
                     break;
-                case 27:
+                case 90 || true:
+                    // alert(1)
                     this.oLocalStorage.clear();
                     break;
                 default:
