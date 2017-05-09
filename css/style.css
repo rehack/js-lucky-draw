@@ -26,10 +26,9 @@ body{font-family: 微软雅黑;font-weight: bold;}
 }
 #turns{
     width: 45%;
-    /* min-height: 150px; */
+    padding: 20px 0;
     margin: 0 auto;
     text-align: center;
-    /* line-height: 342px; */
     border-radius: 10px;
     background: #facd89;
     color: #f00;

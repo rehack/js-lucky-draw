@@ -3,12 +3,13 @@
  * 用到了构造器、箭头函数、新字符串连接语法`${}`、
  */
 class Lucky{
-    constructor(startNum,endNum,numPwrap,totalTurns){
+    constructor(startNum,endNum,numPwrap,totalTurns,smTitle=[]){
         this.startNum=startNum;//参与抽奖的起始号码
         this.endNum=endNum;//参与抽奖的结束号码
         this.digits=this.endNum.toString().length;//中奖号码显示的位数
         this.allList=[];//参与抽奖号码数组
         this.totalTurns=totalTurns;//总抽奖轮次
+        this.smTitle=smTitle;//轮次小标题
         this.luckyNum=null;//中奖号码
         this.flag=true;//开始与停止标记
         this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
@@ -199,9 +200,15 @@ class Lucky{
         }
     }
 
-    // 将中奖号码填充到页面
+    // 将中奖号码填充到页面 && 轮次标题填充
     fill(){
-        this.turnsWrap.innerHTML=`第${this.turn}轮`;
+
+        if(this.smTitle[this.turn-1]){
+
+            this.turnsWrap.innerHTML=`第${this.turn}轮${this.smTitle[this.turn-1]}`;
+        }else{
+            this.turnsWrap.innerHTML=`第${this.turn}轮`;
+        }
         this.numPwrap.innerHTML='';
         this.d=0;
         if(this.getLocalStorage(this.turn) && this.numWrap.length==0){
@@ -228,7 +235,8 @@ window.onload=function(){
     }
 
 
-    let lucky=new Lucky(1,100,'get_num',8);
+    let lucky=new Lucky(1,100,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
+    // let lucky=new Lucky(1,100,'get_num',5);
     lucky.init();
 
 }
