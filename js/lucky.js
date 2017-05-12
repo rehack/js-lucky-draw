@@ -92,6 +92,8 @@ class Lucky{
      * @return {[number]} [带前导0的数字]
      */
     getLucky(){
+
+
         let randomNum=Math.floor(Math.random() * this.allList.length);//随机抽取一个中奖号码
         return this.buquan(this.allList[randomNum],this.digits);//将中奖号码补全前导0 然后返回
     }
@@ -116,6 +118,12 @@ class Lucky{
         console.log('this.numWrap子节点个数：'+this.numWrap.length);
         let oNode=document.createElement('b');
         this.playRuningMusic();//同时播放音效
+
+        // console.log(`参与号码：${this.allList}`)
+        if(this.allList.length<1){
+            alert('参与抽奖号码已抽完！');
+            return false;
+        }
 
         if(this.numWrap.length==0 || this.numWrap.length==this.digits){//当此没有子节点或者子节点已经全部显示 的时候才进行抽取
 
@@ -235,7 +243,7 @@ window.onload=function(){
     }
 
 
-    let lucky=new Lucky(1,99,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
+    let lucky=new Lucky(1,5,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
     // let lucky=new Lucky(1,100,'get_num',5);
     lucky.init();
 
