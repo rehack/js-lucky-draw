@@ -120,7 +120,7 @@ class Lucky{
         this.playRuningMusic();//同时播放音效
 
         // console.log(`参与号码：${this.allList}`)
-        if(this.allList.length<1){
+        if(this.allList.length<1 && this.numWrap.length==this.digits){
             alert('参与抽奖号码已抽完！');
             return false;
         }
@@ -243,7 +243,7 @@ window.onload=function(){
     }
 
 
-    let lucky=new Lucky(1,5,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
+    let lucky=new Lucky(5,10,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
     // let lucky=new Lucky(1,100,'get_num',5);
     lucky.init();
 
