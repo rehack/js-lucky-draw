@@ -4,8 +4,6 @@
  */
 class Lucky{
     constructor(startNum,endNum,numPwrap,totalTurns,smTitle=[]){
-
-
         this.startNum=startNum;//参与抽奖的起始号码
         this.endNum=endNum;//参与抽奖的结束号码
         this.digits=this.endNum.toString().length;//中奖号码显示的位数
@@ -19,8 +17,6 @@ class Lucky{
         this.timer=null;//定时器
         this.oLocalStorage=window.localStorage;//本地存储对象
         this.turn=1;//97->1 98->2 ... 抽奖轮次编号 按左右方向键进行切换
-
-
     }
 
     init(){
