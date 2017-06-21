@@ -45,5 +45,5 @@ body{font-family: 微软雅黑;font-weight: bold;}
     margin-top: 20px;
     overflow-y: auto;
 }
-#get_num .num,#get_num b{display: inline-block;text-align: center;line-height: 200px;vertical-align: middle;font-size: 180px;width: 200px;height: 200px;border: 5px solid #fff;padding: 20px;margin: 10px;}
-#get_num .show{border: none;font-size: 50px;}
+#get_num .num,#get_num b{display: inline-block;text-align: center;line-height: 250px;vertical-align: middle;font-size: 180px;width: 250px;height: 250px;border: 5px solid #fff;padding: 20px;margin: 10px;}
+#get_num .show{border: none;font-size: 50px;text-align: left;}
