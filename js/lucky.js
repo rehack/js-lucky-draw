@@ -1,6 +1,6 @@
 /**
  * ES6类的使用
- * 用到了构造器、箭头函数、新字符串连接语法`${}`、
+ * 用到了构造器、箭头函数、模板字符串`${}`、
  */
 class Lucky{
     constructor(startNum,endNum,numPwrap,totalTurns,smTitle=[]){
@@ -30,7 +30,6 @@ class Lucky{
             alert('您的浏览器不支持window.localStorage，请更换!');
             return false;
         }
-
 
         // 如果还没有存储参与抽奖号码就进行存储
         if(!this.oLocalStorage.getItem("sJoinNum")){
