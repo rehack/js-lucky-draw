@@ -16,12 +16,10 @@ class Lucky{
         this.flag=true;//开始与停止标记
         this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
         this.turnsWrap=document.getElementById('turns');//显示轮次容器
-        // this.numWrap=this.numPwrap.getElementsByTagName('span');//子节点个数
         this.timer=null;//定时器
         this.oLocalStorage=window.localStorage;//本地存储对象
         this.turn=1;//97->1 98->2 ... 抽奖轮次编号 按左右方向键进行切换
-        // this.d=0;//中奖号码滚动位置
-        //
+
 
     }
 
@@ -93,11 +91,9 @@ class Lucky{
                     this.showAllLucky();
                     break;
                 case 90 || true:
-                    // alert(1)
                     this.oLocalStorage.clear();
                     break;
                 default:
-                    // statements_def
                     break;
             }
         }
@@ -137,7 +133,6 @@ class Lucky{
     getLucky(arr){
         let randomNum=Math.floor(Math.random() * arr.length);//随机抽取一个中奖号码
         // alert(arr[randomNum]);
-        // return this.buquan(arr[randomNum],this.digits);//将中奖号码补全前导0 然后返回
         return arr[randomNum];
     }
 
@@ -145,14 +140,7 @@ class Lucky{
 
     // 开始滚动号码效果
     run(){
-        // let arr=this.oLocalStorage.getItem('sJoinNum');
-        // 从本地获取参与抽奖的号码
-        // let aJoinNum=JSON.parse(this.oLocalStorage.getItem('sJoinNum'));
-        // console.log(`参与抽奖号码:${JSON.parse(arr)}`);
-        // console.log(`参与抽奖号码:${arr},typeof:${typeof(arr)},${arr[1]}`);
         clearInterval(this.timer);//清除之前的定时器
-        // console.log('this.numWrap子节点个数：'+this.numWrap.length);
-        // let oNode=document.createElement('b');
         this.playRuningMusic();//同时播放音效
 
         // console.log(`参与号码：${this.aJoinNum}`)
@@ -165,37 +153,24 @@ class Lucky{
 
             this.numPwrap.innerHTML='';
 
-            // this.numPwrap.appendChild(oNode);
-
-
             this.luckyNum=this.getLucky(this.aJoinNum);//
             console.log(`中奖号码：${this.luckyNum}`)
-            // this.removeLuckyNum(this.luckyNum,this.aJoinNum);//移除已经中奖的号码
             let arr=this.removeLuckyNum(this.luckyNum,this.aJoinNum);
             this.oLocalStorage.setItem('sJoinNum',arr);
-            // console.log('抽取后剩余号码：'+this.oLocalStorage.getItem('sJoinNum'));
             console.log(`抽取后剩余号码：${this.aJoinNum}--个数${this.aJoinNum.length}`);
             this.saveLuckyNum(this.luckyNum);//存储
 
-            // this.numPwrap.appendChild(oNode);
             this.timer=setInterval(()=>{
                 this.numPwrap.innerHTML=`<b>${this.aJoinNum[Math.floor(Math.random()*this.aJoinNum.length)]}</b>`; //号码不断滚动
             },50);
-
-
 
     }
 
     // 停止号码滚动
     stop(){
-
         clearInterval(this.timer);
         this.playStopMusic();
-        // let aLuckyNum=this.luckyNum.split('');//将中奖号码进行分割成数组
          this.numPwrap.innerHTML=`<b>${this.luckyNum}</b>`;
-
-
-        // this.d++;
 
     }
 
@@ -267,9 +242,7 @@ window.onload=function(){
         return false;
     }
 
-
     let lucky=new Lucky(1,50,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
-    // let lucky=new Lucky(1,100,'get_num',5);
     lucky.init();
 
 }
