@@ -24,11 +24,6 @@ class Lucky{
     }
 
     init(){
-        if(!this.oLocalStorage){
-            alert('您的浏览器不支持window.localStorage，请更换!');
-            return false;
-        }
-
         // 如果还没有存储参与抽奖号码就进行存储
         if(!this.oLocalStorage.getItem("sJoinNum")){
             // 得到参与抽奖号码数组
@@ -235,8 +230,7 @@ class Lucky{
 
 window.onload=function(){
     if(window.localStorage){
-        var localsObj=window.localStorage;
-        // alert('支持')
+        // var localsObj=window.localStorage;
     }else{
         alert('您的浏览器不支持window.localStorage，请更换');
         return false;
