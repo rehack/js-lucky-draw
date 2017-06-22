@@ -213,7 +213,9 @@ class Lucky{
     // 显示全部中奖号码
     showAllLucky(){
         this.numPwrap.innerHTML='';
+        this.numPwrap.innerHTML='恭喜本次活动所有中奖号码：<br />';
         this.turnsWrap.style.display = 'none';
+        // console.log(this.oLocalStorage.length);//object
         for(let i=1;i<=this.totalTurns;i++){
             if(this.oLocalStorage.getItem(i)){
                 this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
@@ -221,6 +223,7 @@ class Lucky{
 
         }
     }
+
 }
 
 
@@ -232,7 +235,7 @@ window.onload=function(){
         return false;
     }
 
-    let lucky=new Lucky(1,50,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
+    let lucky=new Lucky(1,5,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
     lucky.init();
 
 }
