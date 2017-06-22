@@ -262,9 +262,7 @@ var Lucky = function () {
 }();
 
 window.onload = function () {
-    if (window.localStorage) {
-        // var localsObj=window.localStorage;
-    } else {
+    if (!window.localStorage) {
         alert('您的浏览器不支持window.localStorage，请更换');
         return false;
     }
