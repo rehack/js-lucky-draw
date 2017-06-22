@@ -134,26 +134,17 @@ class Lucky{
         clearInterval(this.timer);//清除之前的定时器
         this.playRuningMusic();//同时播放音效
 
-        // console.log(`参与号码：${this.aJoinNum}`)
-        console.log(`this.aJoinNum.length：${this.aJoinNum.length}`)
         if(this.aJoinNum.length<1){
             alert('参与抽奖号码已抽完！');
             return false;
         }
+        this.numPwrap.innerHTML='';
+        this.timer=setInterval(()=>{
+            let randomIndex=Math.floor(Math.random()*this.aJoinNum.length);
+            console.log(`参与号码：${this.aJoinNum}`);
+            this.numPwrap.innerHTML=`<b>${this.aJoinNum[randomIndex]}</b>`; //号码不断滚动
 
-
-            this.numPwrap.innerHTML='';
-
-            this.luckyNum=this.getLucky(this.aJoinNum);//
-            console.log(`中奖号码：${this.luckyNum}`)
-            let arr=this.removeLuckyNum(this.luckyNum,this.aJoinNum);
-            this.oLocalStorage.setItem('sJoinNum',arr);
-            console.log(`抽取后剩余号码：${this.aJoinNum}--个数${this.aJoinNum.length}`);
-            this.saveLuckyNum(this.luckyNum);//存储
-
-            this.timer=setInterval(()=>{
-                this.numPwrap.innerHTML=`<b>${this.aJoinNum[Math.floor(Math.random()*this.aJoinNum.length)]}</b>`; //号码不断滚动
-            },50);
+        },50);
 
     }
 
@@ -161,7 +152,14 @@ class Lucky{
     stop(){
         clearInterval(this.timer);
         this.playStopMusic();
-         this.numPwrap.innerHTML=`<b>${this.luckyNum}</b>`;
+        this.luckyNum=this.getLucky(this.aJoinNum);//随机抽取一个号码
+        console.log(`中奖号码：${this.luckyNum}`);
+
+        let arr=this.removeLuckyNum(this.luckyNum,this.aJoinNum);//移除该中奖号码
+        this.oLocalStorage.setItem('sJoinNum',arr);//出现存储剩余号码，更新参与抽奖号码
+        console.log(`抽取后剩余号码：${this.aJoinNum}--个数${this.aJoinNum.length}`);
+        this.saveLuckyNum(this.luckyNum);//存储
+        this.numPwrap.innerHTML=`<b>${this.luckyNum}</b>`;
 
     }
 
