@@ -231,7 +231,7 @@ window.onload=function(){
         return false;
     }
 
-    let lucky=new Lucky(1,99,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
+    let lucky=new Lucky(1,30,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
     lucky.init();
 
 }

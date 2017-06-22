@@ -6,3 +6,4 @@
 4. 按Ctrl + z组合键可以清除所有的中奖记录
 5. 方向上键可以查询所有中奖记录
 6. 执行npm run build 即可编译es6->es5
+7. 在IE9+下面运行改程序，必须先将该程序放到服务器环境，否则IE doesn't support localStorage for local files
