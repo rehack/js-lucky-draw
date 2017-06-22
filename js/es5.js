@@ -27,7 +27,6 @@ var Lucky = function () {
         this.timer = null; //定时器
         this.oLocalStorage = window.localStorage; //本地存储对象
         this.turn = 1; //97->1 98->2 ... 抽奖轮次编号 按左右方向键进行切换
-
     }
 
     _createClass(Lucky, [{
@@ -160,24 +159,15 @@ var Lucky = function () {
             clearInterval(this.timer); //清除之前的定时器
             this.playRuningMusic(); //同时播放音效
 
-            // console.log(`参与号码：${this.aJoinNum}`)
-            console.log('this.aJoinNum.length\uFF1A' + this.aJoinNum.length);
             if (this.aJoinNum.length < 1) {
                 alert('参与抽奖号码已抽完！');
                 return false;
             }
-
             this.numPwrap.innerHTML = '';
-
-            this.luckyNum = this.getLucky(this.aJoinNum); //
-            console.log('\u4E2D\u5956\u53F7\u7801\uFF1A' + this.luckyNum);
-            var arr = this.removeLuckyNum(this.luckyNum, this.aJoinNum);
-            this.oLocalStorage.setItem('sJoinNum', arr);
-            console.log('\u62BD\u53D6\u540E\u5269\u4F59\u53F7\u7801\uFF1A' + this.aJoinNum + '--\u4E2A\u6570' + this.aJoinNum.length);
-            this.saveLuckyNum(this.luckyNum); //存储
-
             this.timer = setInterval(function () {
-                _this2.numPwrap.innerHTML = '<b>' + _this2.aJoinNum[Math.floor(Math.random() * _this2.aJoinNum.length)] + '</b>'; //号码不断滚动
+                var randomIndex = Math.floor(Math.random() * _this2.aJoinNum.length);
+                console.log('\u53C2\u4E0E\u53F7\u7801\uFF1A' + _this2.aJoinNum);
+                _this2.numPwrap.innerHTML = '<b>' + _this2.aJoinNum[randomIndex] + '</b>'; //号码不断滚动
             }, 50);
         }
 
@@ -188,6 +178,13 @@ var Lucky = function () {
         value: function stop() {
             clearInterval(this.timer);
             this.playStopMusic();
+            this.luckyNum = this.getLucky(this.aJoinNum); //随机抽取一个号码
+            console.log('\u4E2D\u5956\u53F7\u7801\uFF1A' + this.luckyNum);
+
+            var arr = this.removeLuckyNum(this.luckyNum, this.aJoinNum); //移除该中奖号码
+            this.oLocalStorage.setItem('sJoinNum', arr); //出现存储剩余号码，更新参与抽奖号码
+            console.log('\u62BD\u53D6\u540E\u5269\u4F59\u53F7\u7801\uFF1A' + this.aJoinNum + '--\u4E2A\u6570' + this.aJoinNum.length);
+            this.saveLuckyNum(this.luckyNum); //存储
             this.numPwrap.innerHTML = '<b>' + this.luckyNum + '</b>';
         }
 
@@ -250,7 +247,9 @@ var Lucky = function () {
         key: 'showAllLucky',
         value: function showAllLucky() {
             this.numPwrap.innerHTML = '';
+            this.numPwrap.innerHTML = '恭喜本次活动所有中奖号码：<br />';
             this.turnsWrap.style.display = 'none';
+            // console.log(this.oLocalStorage.length);//object
             for (var i = 1; i <= this.totalTurns; i++) {
                 if (this.oLocalStorage.getItem(i)) {
                     this.numPwrap.innerHTML += '<div class="show">\u7B2C' + i + '\u8F6E' + this.smTitle[i - 1] + '\u4E2D\u5956\u53F7\u7801\uFF1A' + this.oLocalStorage.getItem(i) + '</div>';
@@ -270,6 +269,6 @@ window.onload = function () {
         return false;
     }
 
-    var lucky = new Lucky(1, 50, 'get_num', 5, ['200元代金券', '300元代金券', '500元代金券', '半价种植牙', '免费种植牙']);
+    var lucky = new Lucky(1, 5, 'get_num', 5, ['200元代金券', '300元代金券', '500元代金券', '半价种植牙', '免费种植牙']);
     lucky.init();
 };
