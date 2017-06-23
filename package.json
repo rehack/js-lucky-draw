@@ -22,6 +22,6 @@
     "babel-preset-es2015": "^6.24.1"
   },
   "scripts":{
-    "build":"babel js/lucky.js --out-file js/es5.js"
+    "build":"babel js/main.js --out-file js/es5.js"
   }
 }
