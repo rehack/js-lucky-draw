@@ -3,7 +3,7 @@
  * 用到了构造器、箭头函数、模板字符串`${}`、
  */
 class Lucky{
-    constructor(startNum,endNum,numPwrap,turnsWrap,smTitle=[],selfNum){
+    constructor(startNum,endNum,numPwrap,turnsWrap,smTitle=[],selfNum,runSpeed=30){
         this.startNum=startNum;//参与抽奖的起始号码
         this.endNum=endNum;//参与抽奖的结束号码
         this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
@@ -19,6 +19,10 @@ class Lucky{
         this.timer=null;//定时器
         this.oLocalStorage=window.localStorage;//本地存储对象
         this.turn=1;//抽奖轮次编号 按左右方向键进行切换
+        this.runSpeed=runSpeed;//号码滚动速度(毫秒)
+
+        this.playM=document.getElementById('play-music');//滚动音效对象
+        this.stopM=document.getElementById('stop-music');//停止音效对象
     }
 
     init(){
@@ -160,7 +164,7 @@ class Lucky{
             let randomIndex=Math.floor(Math.random()*this.aJoinNum.length);
             console.log(`参与号码：${this.aJoinNum}`);
             this.numPwrap.innerHTML=`<b>${this.aJoinNum[randomIndex]}</b>`; //号码不断滚动
-        },20);
+        },this.runSpeed);
 
     }
 
@@ -193,12 +197,14 @@ class Lucky{
 
     // 滚动音效
     playRuningMusic(){
-
+        // this.playM.load();//从新加载audio 使其重头播放
+        this.playM.play();
     }
 
     // 停止音效
     playStopMusic(){
-
+        this.playM.pause();
+        this.stopM.play();
     }
 
     //将中奖号码进行存储
