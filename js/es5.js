@@ -9,24 +9,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * 用到了构造器、箭头函数、模板字符串`${}`、
  */
 var Lucky = function () {
-    function Lucky(startNum, endNum, numPwrap, totalTurns) {
-        var smTitle = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
+    function Lucky(startNum, endNum, numPwrap) {
+        var smTitle = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+        var selfNum = arguments[4];
 
         _classCallCheck(this, Lucky);
 
         this.startNum = startNum; //参与抽奖的起始号码
         this.endNum = endNum; //参与抽奖的结束号码
+        this.numPwrap = document.getElementById(numPwrap); //号码显示父容器
+        this.smTitle = smTitle; //轮次小标题
+        this.selfNum = selfNum; //每轮内定号码 传一个二维数组
+
         this.digits = this.endNum.toString().length; //中奖号码显示的位数
         this.aJoinNum = [];
-        this.totalTurns = totalTurns; //总抽奖轮次
-        this.smTitle = smTitle; //轮次小标题
+        this.totalTurns = smTitle.length; //总抽奖轮次
         this.luckyNum = null; //中奖号码
         this.flag = true; //开始与停止标记
-        this.numPwrap = document.getElementById(numPwrap); //号码显示父容器
         this.turnsWrap = document.getElementById('turns'); //显示轮次容器
         this.timer = null; //定时器
         this.oLocalStorage = window.localStorage; //本地存储对象
-        this.turn = 1; //97->1 98->2 ... 抽奖轮次编号 按左右方向键进行切换
+        this.turn = 1; //抽奖轮次编号 按左右方向键进行切换
     }
 
     _createClass(Lucky, [{
@@ -39,9 +42,22 @@ var Lucky = function () {
                 // 得到参与抽奖号码数组
                 var arr = [];
                 for (var i = this.startNum; i <= this.endNum; i++) {
+
                     var j = this.buquan(i, this.digits);
                     arr.push(j);
+
+                    for (var a = 0; a < this.selfNum.length; a++) {
+
+                        for (var b = 0; b < this.selfNum[a].length; b++) {
+                            // console(1)
+                            this.buquan(this.selfNum[a][b], this.digits);
+                            // console.log(this.selfNum[a][b])
+                            this.removeLuckyNum(this.buquan(this.selfNum[a][b], this.digits), arr);
+                            // this.removeLuckyNum[1,arr];
+                        }
+                    }
                 }
+                // console.log('arr'+arr)
                 // let str = JSON.stringify(arr);
                 var str = arr.join(',');
                 localStorage.setItem("sJoinNum", str);
@@ -114,6 +130,7 @@ var Lucky = function () {
             }
             for (var i = 0; i < length - l; i++) {
                 numstr = "0" + numstr;
+                // console.log(numstr)
             }
             return numstr;
         }
@@ -168,7 +185,7 @@ var Lucky = function () {
                 var randomIndex = Math.floor(Math.random() * _this2.aJoinNum.length);
                 console.log('\u53C2\u4E0E\u53F7\u7801\uFF1A' + _this2.aJoinNum);
                 _this2.numPwrap.innerHTML = '<b>' + _this2.aJoinNum[randomIndex] + '</b>'; //号码不断滚动
-            }, 50);
+            }, 20);
         }
 
         // 停止号码滚动
@@ -178,10 +195,22 @@ var Lucky = function () {
         value: function stop() {
             clearInterval(this.timer);
             this.playStopMusic();
-            this.luckyNum = this.getLucky(this.aJoinNum); //随机抽取一个号码
+            // alert(this.turn)
+            // alert(this.selfNum[this.turn-1])
+            if (this.selfNum[this.turn - 1].length > 0) {
+                // alert(1)
+                this.luckyNum = this.buquan(this.getLucky(this.selfNum[this.turn - 1]), this.digits);
+                // console.log(  this.buquan( this.getLucky(this.selfNum[this.turn-1]),this.digits )  )
+            } else {
+
+                this.luckyNum = this.getLucky(this.aJoinNum); //随机抽取一个号码
+            }
             console.log('\u4E2D\u5956\u53F7\u7801\uFF1A' + this.luckyNum);
 
+            this.selfNum[this.turn - 1] = this.removeLuckyNum(this.luckyNum, this.selfNum[this.turn - 1]);
+
             var arr = this.removeLuckyNum(this.luckyNum, this.aJoinNum); //移除该中奖号码
+
             this.oLocalStorage.setItem('sJoinNum', arr); //出现存储剩余号码，更新参与抽奖号码
             console.log('\u62BD\u53D6\u540E\u5269\u4F59\u53F7\u7801\uFF1A' + this.aJoinNum + '--\u4E2A\u6570' + this.aJoinNum.length);
             this.saveLuckyNum(this.luckyNum); //存储
@@ -231,6 +260,7 @@ var Lucky = function () {
             if (this.smTitle[this.turn - 1]) {
 
                 this.turnsWrap.innerHTML = '\u7B2C' + this.turn + '\u8F6E' + this.smTitle[this.turn - 1];
+                // this.turnsWrap.innerHTML=`${this.smTitle[this.turn-1]}`;
             } else {
                 this.turnsWrap.innerHTML = '\u7B2C' + this.turn + '\u8F6E';
             }
@@ -260,13 +290,3 @@ var Lucky = function () {
 
     return Lucky;
 }();
-
-window.onload = function () {
-    if (!window.localStorage) {
-        alert('您的浏览器不支持window.localStorage，请更换');
-        return false;
-    }
-
-    var lucky = new Lucky(1, 99, 'get_num', 5, ['200元代金券', '300元代金券', '500元代金券', '半价种植牙', '免费种植牙']);
-    lucky.init();
-};

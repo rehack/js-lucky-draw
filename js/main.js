@@ -3,20 +3,22 @@
  * 用到了构造器、箭头函数、模板字符串`${}`、
  */
 class Lucky{
-    constructor(startNum,endNum,numPwrap,totalTurns,smTitle=[]){
+    constructor(startNum,endNum,numPwrap,smTitle=[],selfNum){
         this.startNum=startNum;//参与抽奖的起始号码
         this.endNum=endNum;//参与抽奖的结束号码
+        this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
+        this.smTitle=smTitle;//轮次小标题
+        this.selfNum=selfNum;//每轮内定号码 传一个二维数组
+
         this.digits=this.endNum.toString().length;//中奖号码显示的位数
         this.aJoinNum=[];
-        this.totalTurns=totalTurns;//总抽奖轮次
-        this.smTitle=smTitle;//轮次小标题
+        this.totalTurns=smTitle.length;//总抽奖轮次
         this.luckyNum=null;//中奖号码
         this.flag=true;//开始与停止标记
-        this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
         this.turnsWrap=document.getElementById('turns');//显示轮次容器
         this.timer=null;//定时器
         this.oLocalStorage=window.localStorage;//本地存储对象
-        this.turn=1;//97->1 98->2 ... 抽奖轮次编号 按左右方向键进行切换
+        this.turn=1;//抽奖轮次编号 按左右方向键进行切换
     }
 
     init(){
@@ -25,9 +27,23 @@ class Lucky{
             // 得到参与抽奖号码数组
             let arr=[];
             for(let i=this.startNum;i<=this.endNum;i++){
+
                 let j=this.buquan(i,this.digits)
                 arr.push(j);
+
+
+                for(var a=0;a<this.selfNum.length;a++){
+
+                    for(var b=0;b<this.selfNum[a].length;b++){
+                        // console(1)
+                        this.buquan(this.selfNum[a][b],this.digits);
+                        // console.log(this.selfNum[a][b])
+                        this.removeLuckyNum(this.buquan(this.selfNum[a][b],this.digits),arr);
+                        // this.removeLuckyNum[1,arr];
+                    }
+                }
             }
+            // console.log('arr'+arr)
             // let str = JSON.stringify(arr);
             let str = arr.join(',');
             localStorage.setItem("sJoinNum",str);
@@ -97,6 +113,7 @@ class Lucky{
         if (l>=length) {return numstr;}
         for(let  i = 0 ;i<length - l;i++){
             numstr = "0" + numstr;
+            // console.log(numstr)
         }
         return numstr;
     }
@@ -143,8 +160,7 @@ class Lucky{
             let randomIndex=Math.floor(Math.random()*this.aJoinNum.length);
             console.log(`参与号码：${this.aJoinNum}`);
             this.numPwrap.innerHTML=`<b>${this.aJoinNum[randomIndex]}</b>`; //号码不断滚动
-
-        },50);
+        },20);
 
     }
 
@@ -152,10 +168,22 @@ class Lucky{
     stop(){
         clearInterval(this.timer);
         this.playStopMusic();
-        this.luckyNum=this.getLucky(this.aJoinNum);//随机抽取一个号码
+        // alert(this.turn)
+        // alert(this.selfNum[this.turn-1])
+        if(this.selfNum[this.turn-1].length>0){
+            // alert(1)
+            this.luckyNum=this.buquan(this.getLucky(this.selfNum[this.turn-1]),this.digits);
+            // console.log(  this.buquan( this.getLucky(this.selfNum[this.turn-1]),this.digits )  )
+        }else{
+
+            this.luckyNum=this.getLucky(this.aJoinNum);//随机抽取一个号码
+        }
         console.log(`中奖号码：${this.luckyNum}`);
 
+        this.selfNum[this.turn-1]=this.removeLuckyNum(this.luckyNum,this.selfNum[this.turn-1]);
+
         let arr=this.removeLuckyNum(this.luckyNum,this.aJoinNum);//移除该中奖号码
+
         this.oLocalStorage.setItem('sJoinNum',arr);//出现存储剩余号码，更新参与抽奖号码
         console.log(`抽取后剩余号码：${this.aJoinNum}--个数${this.aJoinNum.length}`);
         this.saveLuckyNum(this.luckyNum);//存储
@@ -196,6 +224,7 @@ class Lucky{
         if(this.smTitle[this.turn-1]){
 
             this.turnsWrap.innerHTML=`第${this.turn}轮${this.smTitle[this.turn-1]}`;
+            // this.turnsWrap.innerHTML=`${this.smTitle[this.turn-1]}`;
         }else{
             this.turnsWrap.innerHTML=`第${this.turn}轮`;
         }
@@ -221,17 +250,5 @@ class Lucky{
 
         }
     }
-
-}
-
-
-window.onload=function(){
-    if(!window.localStorage){
-        alert('您的浏览器不支持window.localStorage，请更换');
-        return false;
-    }
-
-    let lucky=new Lucky(1,99,'get_num',5,['200元代金券','300元代金券','500元代金券','半价种植牙','免费种植牙']);
-    lucky.init();
 
 }

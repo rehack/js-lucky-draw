@@ -17,7 +17,19 @@
         <button class="hide" id="reset">重置</button>
         <div class="hide" id="all_nums"></div>
     </div>
-    <!-- <script src="js/lucky.js"></script> -->
-    <script src="js/es5.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        window.onload=function(){
+            if(!window.localStorage){
+                alert('您的浏览器不支持window.localStorage，请更换');
+                return false;
+            }
+
+            var lucky=new Lucky(1,35,'get_num',['300元代金券','500元代金券','免费种植牙'],[[20,31],[],[12,15]]);
+            lucky.init();
+
+        }
+    </script>
+    <!-- <script src="js/es5.js"></script> -->
 </body>
 </html>
