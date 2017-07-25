@@ -3,10 +3,11 @@
  * 用到了构造器、箭头函数、模板字符串`${}`、
  */
 class Lucky{
-    constructor(startNum,endNum,numPwrap,smTitle=[],selfNum){
+    constructor(startNum,endNum,numPwrap,turnsWrap,smTitle=[],selfNum){
         this.startNum=startNum;//参与抽奖的起始号码
         this.endNum=endNum;//参与抽奖的结束号码
         this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
+        this.turnsWrap=document.getElementById(turnsWrap);//显示轮次容器
         this.smTitle=smTitle;//轮次小标题
         this.selfNum=selfNum;//每轮内定号码 传一个二维数组
 
@@ -15,7 +16,6 @@ class Lucky{
         this.totalTurns=smTitle.length;//总抽奖轮次
         this.luckyNum=null;//中奖号码
         this.flag=true;//开始与停止标记
-        this.turnsWrap=document.getElementById('turns');//显示轮次容器
         this.timer=null;//定时器
         this.oLocalStorage=window.localStorage;//本地存储对象
         this.turn=1;//抽奖轮次编号 按左右方向键进行切换
