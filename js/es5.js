@@ -103,7 +103,7 @@ var Lucky = function () {
                 switch (oEvent.keyCode || oEvent.ctrlKey) {
                     case 37:
                         if (_this.runStatus) {
-                            return false; //未停止抽奖如果进行切换轮次产生bug修复
+                            return false; //未停止抽奖不允许进行键盘切换
                         }
                         _this.turn -= 1;
                         if (_this.turn == 0) {
@@ -113,18 +113,19 @@ var Lucky = function () {
                         break;
                     case 39:
                         if (_this.runStatus) {
-                            return false;
+                            return false; //未停止抽奖不允许进行键盘切换
                         }
                         _this.turn += 1;
-                        // alert(this.runStatus)
                         if (_this.turn > _this.totalTurns) {
-                            // alert(1)
                             _this.turn = 1;
                         }
                         _this.fill();
                         break;
                     case 38:
                         //查询全部中奖记录
+                        if (_this.runStatus) {
+                            return false; //未停止抽奖不允许进行键盘切换
+                        }
                         _this.showAllLucky();
                         break;
                     case 90 || true:

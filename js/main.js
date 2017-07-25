@@ -88,7 +88,7 @@ class Lucky{
             switch (oEvent.keyCode || oEvent.ctrlKey ) {
                 case 37:
                     if(this.runStatus){
-                        return false;//未停止抽奖如果进行切换轮次产生bug修复
+                        return false;//未停止抽奖不允许进行键盘切换
                     }
                     this.turn-=1;
                     if(this.turn==0){
@@ -98,17 +98,18 @@ class Lucky{
                     break;
                 case 39:
                     if(this.runStatus){
-                        return false;
+                        return false;//未停止抽奖不允许进行键盘切换
                     }
                     this.turn+=1;
-                    // alert(this.runStatus)
                     if(this.turn>this.totalTurns){
-                        // alert(1)
                         this.turn=1;
                     }
                     this.fill();
                     break;
                 case 38://查询全部中奖记录
+                    if(this.runStatus){
+                        return false;//未停止抽奖不允许进行键盘切换
+                    }
                     this.showAllLucky();
                     break;
                 case 90 || true:
