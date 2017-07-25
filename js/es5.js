@@ -36,6 +36,8 @@ var Lucky = function () {
         this.turn = 1; //抽奖轮次编号 按左右方向键进行切换
         this.runSpeed = runSpeed; //号码滚动速度(毫秒)
 
+        this.runStatus = false;
+
         this.playM = document.getElementById('play-music'); //滚动音效对象
         this.stopM = document.getElementById('stop-music'); //停止音效对象
     }
@@ -100,6 +102,9 @@ var Lucky = function () {
                 // 左右方向键切换抽奖轮次，Ctrl + z清除localStorage
                 switch (oEvent.keyCode || oEvent.ctrlKey) {
                     case 37:
+                        if (_this.runStatus) {
+                            return false; //未停止抽奖如果进行切换轮次产生bug修复
+                        }
                         _this.turn -= 1;
                         if (_this.turn == 0) {
                             _this.turn = _this.totalTurns;
@@ -107,8 +112,13 @@ var Lucky = function () {
                         _this.fill();
                         break;
                     case 39:
+                        if (_this.runStatus) {
+                            return false;
+                        }
                         _this.turn += 1;
+                        // alert(this.runStatus)
                         if (_this.turn > _this.totalTurns) {
+                            // alert(1)
                             _this.turn = 1;
                         }
                         _this.fill();
@@ -181,6 +191,8 @@ var Lucky = function () {
         value: function run() {
             var _this2 = this;
 
+            this.runStatus = true; //运行中的标记
+
             clearInterval(this.timer); //清除之前的定时器
             this.playRuningMusic(); //同时播放音效
 
@@ -202,6 +214,7 @@ var Lucky = function () {
         key: 'stop',
         value: function stop() {
             clearInterval(this.timer);
+            this.runStatus = false;
             this.playStopMusic();
             // alert(this.turn)
             // alert(this.selfNum[this.turn-1])

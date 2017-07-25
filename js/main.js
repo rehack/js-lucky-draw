@@ -21,6 +21,8 @@ class Lucky{
         this.turn=1;//抽奖轮次编号 按左右方向键进行切换
         this.runSpeed=runSpeed;//号码滚动速度(毫秒)
 
+        this.runStatus=false;
+
         this.playM=document.getElementById('play-music');//滚动音效对象
         this.stopM=document.getElementById('stop-music');//停止音效对象
     }
@@ -85,6 +87,9 @@ class Lucky{
             // 左右方向键切换抽奖轮次，Ctrl + z清除localStorage
             switch (oEvent.keyCode || oEvent.ctrlKey ) {
                 case 37:
+                    if(this.runStatus){
+                        return false;//未停止抽奖如果进行切换轮次产生bug修复
+                    }
                     this.turn-=1;
                     if(this.turn==0){
                         this.turn=this.totalTurns;
@@ -92,8 +97,13 @@ class Lucky{
                     this.fill();
                     break;
                 case 39:
+                    if(this.runStatus){
+                        return false;
+                    }
                     this.turn+=1;
+                    // alert(this.runStatus)
                     if(this.turn>this.totalTurns){
+                        // alert(1)
                         this.turn=1;
                     }
                     this.fill();
@@ -152,6 +162,8 @@ class Lucky{
 
     // 开始滚动号码效果
     run(){
+        this.runStatus=true;//运行中的标记
+
         clearInterval(this.timer);//清除之前的定时器
         this.playRuningMusic();//同时播放音效
 
@@ -171,6 +183,7 @@ class Lucky{
     // 停止号码滚动
     stop(){
         clearInterval(this.timer);
+        this.runStatus=false;
         this.playStopMusic();
         // alert(this.turn)
         // alert(this.selfNum[this.turn-1])
