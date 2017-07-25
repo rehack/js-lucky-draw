@@ -9,15 +9,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * 用到了构造器、箭头函数、模板字符串`${}`、
  */
 var Lucky = function () {
-    function Lucky(startNum, endNum, numPwrap, turnsWrap) {
-        var smTitle = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
-        var selfNum = arguments[5];
-        var runSpeed = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 30;
+    function Lucky() {
+        var initNum = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1, 40];
+        var numPwrap = arguments[1];
+        var turnsWrap = arguments[2];
+        var smTitle = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+        var selfNum = arguments[4];
+        var runSpeed = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 30;
 
         _classCallCheck(this, Lucky);
 
-        this.startNum = startNum; //参与抽奖的起始号码
-        this.endNum = endNum; //参与抽奖的结束号码
+        this.startNum = initNum[0]; //参与抽奖的起始号码
+        this.endNum = initNum[1]; //参与抽奖的结束号码
         this.numPwrap = document.getElementById(numPwrap); //号码显示父容器
         this.turnsWrap = document.getElementById(turnsWrap); //显示轮次容器
         this.smTitle = smTitle; //轮次小标题
@@ -228,6 +231,8 @@ var Lucky = function () {
         key: 'playRuningMusic',
         value: function playRuningMusic() {
             // this.playM.load();//从新加载audio 使其重头播放
+
+            this.stopM.pause();
             this.playM.play();
         }
 
@@ -237,6 +242,7 @@ var Lucky = function () {
         key: 'playStopMusic',
         value: function playStopMusic() {
             this.playM.pause();
+            this.stopM.load();
             this.stopM.play();
         }
 

@@ -3,9 +3,9 @@
  * 用到了构造器、箭头函数、模板字符串`${}`、
  */
 class Lucky{
-    constructor(startNum,endNum,numPwrap,turnsWrap,smTitle=[],selfNum,runSpeed=30){
-        this.startNum=startNum;//参与抽奖的起始号码
-        this.endNum=endNum;//参与抽奖的结束号码
+    constructor(initNum=[1,40],numPwrap,turnsWrap,smTitle=[],selfNum,runSpeed=30){
+        this.startNum=initNum[0];//参与抽奖的起始号码
+        this.endNum=initNum[1];//参与抽奖的结束号码
         this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
         this.turnsWrap=document.getElementById(turnsWrap);//显示轮次容器
         this.smTitle=smTitle;//轮次小标题
@@ -198,12 +198,15 @@ class Lucky{
     // 滚动音效
     playRuningMusic(){
         // this.playM.load();//从新加载audio 使其重头播放
+
+        this.stopM.pause();
         this.playM.play();
     }
 
     // 停止音效
     playStopMusic(){
         this.playM.pause();
+        this.stopM.load();
         this.stopM.play();
     }
 
