@@ -18,10 +18,11 @@
         <audio id="stop-music" src="music/stop.mp3"></audio>
     </div>
     <script src="js/main.js"></script>
+    <!-- <script src="js/es5.js"></script> -->
     <script>
         window.onload=function(){
             if(!window.localStorage){
-                alert('您的浏览器不支持window.localStorage，请更换');
+                alert('您的浏览器不支持window.localStorage! 请更换最新chrome或Firefox');
                 return false;
             }
             var selfNum=[
@@ -34,6 +35,5 @@
             lucky.init();
         }
     </script>
-    <!-- <script src="js/es5.js"></script> -->
 </body>
 </html>
