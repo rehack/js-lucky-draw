@@ -3,7 +3,7 @@
  * 用到了构造器、箭头函数、模板字符串`${}`、
  */
 class Lucky{
-    constructor(initNum=[1,40],numPwrap,turnsWrap,smTitle=[],selfNum,runSpeed=30){
+    constructor(initNum=[1,40],numPwrap,turnsWrap,smTitle=[],selfNum=[],runSpeed=30){
         this.startNum=initNum[0];//参与抽奖的起始号码
         this.endNum=initNum[1];//参与抽奖的结束号码
         this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
@@ -188,17 +188,18 @@ class Lucky{
         this.playStopMusic();
         // alert(this.turn)
         // alert(this.selfNum[this.turn-1])
-        if(this.selfNum[this.turn-1].length>0){
+        if(this.selfNum.length>0 && this.selfNum[this.turn-1].length>0){
             // alert(1)
             this.luckyNum=this.buquan(this.getLucky(this.selfNum[this.turn-1]),this.digits);
-            // console.log(  this.buquan( this.getLucky(this.selfNum[this.turn-1]),this.digits )  )
+
+            this.selfNum[this.turn-1]=this.removeLuckyNum(this.luckyNum,this.selfNum[this.turn-1]);//从内定号码数组中移除中奖号码
         }else{
 
             this.luckyNum=this.getLucky(this.aJoinNum);//随机抽取一个号码
         }
         console.log(`中奖号码：${this.luckyNum}`);
 
-        this.selfNum[this.turn-1]=this.removeLuckyNum(this.luckyNum,this.selfNum[this.turn-1]);
+
 
         let arr=this.removeLuckyNum(this.luckyNum,this.aJoinNum);//移除该中奖号码
 

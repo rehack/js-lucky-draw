@@ -14,7 +14,7 @@ var Lucky = function () {
         var numPwrap = arguments[1];
         var turnsWrap = arguments[2];
         var smTitle = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
-        var selfNum = arguments[4];
+        var selfNum = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
         var runSpeed = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 30;
 
         _classCallCheck(this, Lucky);
@@ -219,17 +219,16 @@ var Lucky = function () {
             this.playStopMusic();
             // alert(this.turn)
             // alert(this.selfNum[this.turn-1])
-            if (this.selfNum[this.turn - 1].length > 0) {
+            if (this.selfNum.length > 0 && this.selfNum[this.turn - 1].length > 0) {
                 // alert(1)
                 this.luckyNum = this.buquan(this.getLucky(this.selfNum[this.turn - 1]), this.digits);
-                // console.log(  this.buquan( this.getLucky(this.selfNum[this.turn-1]),this.digits )  )
+
+                this.selfNum[this.turn - 1] = this.removeLuckyNum(this.luckyNum, this.selfNum[this.turn - 1]); //从内定号码数组中移除中奖号码
             } else {
 
                 this.luckyNum = this.getLucky(this.aJoinNum); //随机抽取一个号码
             }
             console.log('\u4E2D\u5956\u53F7\u7801\uFF1A' + this.luckyNum);
-
-            this.selfNum[this.turn - 1] = this.removeLuckyNum(this.luckyNum, this.selfNum[this.turn - 1]);
 
             var arr = this.removeLuckyNum(this.luckyNum, this.aJoinNum); //移除该中奖号码
 
