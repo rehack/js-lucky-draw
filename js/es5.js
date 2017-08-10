@@ -12,13 +12,21 @@ var Lucky = function () {
     function Lucky(params) {
         _classCallCheck(this, Lucky);
 
-        this.startNum = params.initNum[0]; //参与抽奖的起始号码
-        this.endNum = params.initNum[1]; //参与抽奖的结束号码
-        this.numPwrap = document.getElementById(params.numPwrap); //号码显示父容器
-        this.turnsWrap = document.getElementById(params.turnsWrap); //显示轮次容器
-        this.smTitle = params.smTitle; //轮次小标题
-        this.selfNum = params.selfNum; //每轮内定号码 传一个二维数组
-        this.runSpeed = params.runSpeed; //号码滚动速度(毫秒)
+        // initNum=[1,40],numPwrap,turnsWrap,smTitle=[],selfNum=[],runSpeed=30
+        /*this.startNum=initNum[0];//参与抽奖的起始号码
+        this.endNum=initNum[1];//参与抽奖的结束号码
+        this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
+        this.turnsWrap=document.getElementById(turnsWrap);//显示轮次容器
+        this.smTitle=smTitle;//轮次小标题
+        this.selfNum=selfNum;//每轮内定号码 传一个二维数组*/
+
+        this.startNum = params.initNum[0]; //参与抽奖的起始号码 必填参数
+        this.endNum = params.initNum[1]; //参与抽奖的结束号码 必填参数
+        this.numPwrap = document.getElementById(params.numPwrap); //号码显示父容器 必填参数
+        this.turnsWrap = document.getElementById(params.turnsWrap); //显示轮次容器 必填参数
+        this.smTitle = params.smTitle || []; //轮次小标题 必填参数
+        this.selfNum = params.selfNum || []; //每轮内定号码 传一个二维数组
+        this.runSpeed = params.runSpeed || 40; //号码滚动速度(毫秒)
         this.isPlay = params.isPlay; //是否播放音效
 
 
