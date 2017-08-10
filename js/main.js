@@ -3,25 +3,28 @@
  * 用到了构造器、箭头函数、模板字符串`${}`、
  */
 class Lucky{
-    constructor(initNum=[1,40],numPwrap,turnsWrap,smTitle=[],selfNum=[],runSpeed=30){
-        this.startNum=initNum[0];//参与抽奖的起始号码
-        this.endNum=initNum[1];//参与抽奖的结束号码
-        this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
-        this.turnsWrap=document.getElementById(turnsWrap);//显示轮次容器
-        this.smTitle=smTitle;//轮次小标题
-        this.selfNum=selfNum;//每轮内定号码 传一个二维数组
+    constructor(params){
+        this.startNum=params.initNum[0];//参与抽奖的起始号码
+        this.endNum=params.initNum[1];//参与抽奖的结束号码
+        this.numPwrap=document.getElementById(params.numPwrap);//号码显示父容器
+        this.turnsWrap=document.getElementById(params.turnsWrap);//显示轮次容器
+        this.smTitle=params.smTitle;//轮次小标题
+        this.selfNum=params.selfNum;//每轮内定号码 传一个二维数组
+        this.runSpeed=params.runSpeed;//号码滚动速度(毫秒)
+        this.isPlay=params.isPlay;//是否播放音效
+
+
 
         this.digits=this.endNum.toString().length;//中奖号码显示的位数
         this.aJoinNum=[];
-        this.totalTurns=smTitle.length;//总抽奖轮次
+        this.totalTurns=this.smTitle.length;//总抽奖轮次
         this.luckyNum=null;//中奖号码
         this.flag=true;//开始与停止标记
         this.timer=null;//定时器
         this.oLocalStorage=window.localStorage;//本地存储对象
         this.turn=1;//抽奖轮次编号 按左右方向键进行切换
-        this.runSpeed=runSpeed;//号码滚动速度(毫秒)
 
-        this.runStatus=false;
+        this.runStatus=false;//抽奖状态 正在滚动或者已经停止
 
         this.playM=document.getElementById('play-music');//滚动音效对象
         this.stopM=document.getElementById('stop-music');//停止音效对象
@@ -166,7 +169,10 @@ class Lucky{
         this.runStatus=true;//运行中的标记
 
         clearInterval(this.timer);//清除之前的定时器
-        this.playRuningMusic();//同时播放音效
+
+        if(this.isPlay){
+            this.playRuningMusic();//同时播放音效
+        }
 
         if(this.aJoinNum.length<1){
             alert('参与抽奖号码已抽完！');
@@ -185,7 +191,9 @@ class Lucky{
     stop(){
         clearInterval(this.timer);
         this.runStatus=false;
-        this.playStopMusic();
+        if(this.isPlay){
+            this.playStopMusic();
+        }
         // alert(this.turn)
         // alert(this.selfNum[this.turn-1])
         if(this.selfNum.length>0 && this.selfNum[this.turn-1].length>0){
