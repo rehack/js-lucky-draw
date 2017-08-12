@@ -20,6 +20,7 @@ class Lucky{
         this.selfNum=params.selfNum || [];//每轮内定号码 传一个二维数组
         this.runSpeed=params.runSpeed || 40;//号码滚动速度(毫秒)
         this.isPlay=params.isPlay;//是否播放音效
+        this.isShowTurn=params.isShowTurn;//是否显示轮次标题
 
 
 
@@ -262,9 +263,11 @@ class Lucky{
     fill(){
 
         if(this.smTitle[this.turn-1]){
-
-            this.turnsWrap.innerHTML=`第${this.turn}轮${this.smTitle[this.turn-1]}`;
-            // this.turnsWrap.innerHTML=`${this.smTitle[this.turn-1]}`;
+            if(this.isShowTurn){
+                this.turnsWrap.innerHTML=`第${this.turn}轮${this.smTitle[this.turn-1]}`;
+            }else{
+                this.turnsWrap.innerHTML=`${this.smTitle[this.turn-1]}`;
+            }
         }else{
             this.turnsWrap.innerHTML=`第${this.turn}轮`;
         }
@@ -285,7 +288,11 @@ class Lucky{
         // console.log(this.oLocalStorage.length);//object
         for(let i=1;i<=this.totalTurns;i++){
             if(this.oLocalStorage.getItem(i)){
-                this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
+                if(this.isShowTurn){
+                    this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
+                }else{
+                    this.numPwrap.innerHTML+=`<div class="show">${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
+                }
             }
 
         }
