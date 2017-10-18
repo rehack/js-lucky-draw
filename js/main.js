@@ -264,13 +264,21 @@ class Lucky{
         }*/
 
         // this.oLocalStorage.setItem(this.turn,`${this.getLocalStorage(this.turn)}、${num}`);
-        json.json.this.turnsWrap.innerHTML
 
-        var json={
+        /*var json={
             "a":[22],
             'b':[12,23]
+        }*/
+        var json={};
+        if(!this.oLocalStorage[this.turn]){//如果此轮抽奖结果没有存储就进行存储
+            this.oLocalStorage.setItem(this.turnsWrap.innerHTML,num);
+        }else{
+            this.oLocalStorage.setItem(this.turn,`${this.getLocalStorage(this.turn)}、${num}`);
         }
-        var tmp='';
+        json.this.turnsWrap.innerHTML=[];
+        json.this.turnsWrap.innerHTML.push(num);
+
+        var tmp=JSON.stringify(json);
         if(!json.this.turnsWrap.innerHTML){
             tmp=JSON.stringify(obj); //转化为JSON字符串
         }
