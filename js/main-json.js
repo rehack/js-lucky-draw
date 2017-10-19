@@ -37,6 +37,8 @@ class Lucky{
 
         this.playM=document.getElementById('play-music');//滚动音效对象
         this.stopM=document.getElementById('stop-music');//停止音效对象
+
+        this.json={};//临时存储中奖信息的json
     }
 
     init(){
@@ -126,6 +128,19 @@ class Lucky{
                     break;
                 case 90 || true:
                     this.oLocalStorage.clear();
+                    break;
+
+                case 49:
+                    this.turnsWrap.innerHTML=`第${this.turn}轮：${this.smTitle[0]}`;
+                    break;
+                case 50:
+                    this.turnsWrap.innerHTML=`第${this.turn}轮：${this.smTitle[1]}`;
+                    break;
+                case 51:
+                    this.turnsWrap.innerHTML=`第${this.turn}轮：${this.smTitle[2]}`;
+                    break;
+                case 52:
+                    this.turnsWrap.innerHTML=`第${this.turn}轮：${this.smTitle[3]}`;
                     break;
                 default:
                     break;
@@ -244,11 +259,34 @@ class Lucky{
 
     //将中奖号码进行存储
     saveLuckyNum(num){
-        if(!this.oLocalStorage[this.turn]){//如果次轮抽奖结果没有存储就进行存储
-            this.oLocalStorage.setItem(this.turn,num);
+        /*if(!this.oLocalStorage[this.turn]){//如果此轮抽奖结果没有存储就进行存储
+            this.oLocalStorage.setItem(this.turnsWrap.innerHTML,num);
         }else{
             this.oLocalStorage.setItem(this.turn,`${this.getLocalStorage(this.turn)}、${num}`);
+        }*/
+
+        // this.oLocalStorage.setItem(this.turn,`${this.getLocalStorage(this.turn)}、${num}`);
+
+        /*var json={
+            "a":[22],
+            'b':[12,23]
+        }*/
+        var s=this.turnsWrap.innerHTML;
+        if(!this.oLocalStorage[this.turn]){//如果此轮抽奖结果没有存储就进行存储
+            this.json={};
+
         }
+        if(!this.json[s]){
+            this.json[s]=[];
+
+            this.json[s].push(num);
+        }else{
+            this.json[s].push(num);
+        }
+
+
+        var tmp=JSON.stringify(this.json);
+        this.oLocalStorage.setItem(this.turn,tmp);
     }
 
     getLocalStorage(turn){
@@ -264,7 +302,7 @@ class Lucky{
 
         if(this.smTitle[this.turn-1]){
             if(this.isShowTurn){
-                this.turnsWrap.innerHTML=`第${this.turn}轮${this.smTitle[this.turn-1]}`;
+                this.turnsWrap.innerHTML=`第${this.turn}轮：${this.smTitle[this.turn-1]}`;
             }else{
                 this.turnsWrap.innerHTML=`${this.smTitle[this.turn-1]}`;
             }
