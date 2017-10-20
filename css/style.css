@@ -46,5 +46,5 @@ body{font-family: 微软雅黑,Arial;font-weight: bold;}
     margin-top: 20px;
     overflow-y: auto;
 }
-#show-lucky .num,#show-lucky b{display: inline-block;text-align: center;line-height: 250px;vertical-align: middle;font-size: 180px;width: 250px;height: 250px;border: 5px solid #fff;padding: 20px;margin: 10px;}
+#show-lucky .num,#show-lucky b{display: inline-block;border-radius:100%;text-align: center;line-height: 334px;vertical-align: middle;font-size: 180px;width: 334px;height: 334px;border: 5px solid #fff;padding: 15px;margin: 10px;}
 #show-lucky .show{border: none;font-size: 50px;text-align: left;}

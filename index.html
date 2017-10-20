@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>成都贝臣齿科活动抽奖</title>
+<title>活动抽奖</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="bg"><img src="images/bg.jpg" alt=""></div>
     <div class="center-box">
         <div class="logo"><img src="images/logo.png" alt=""></div>
-        <div id="turns-heading"></div>
+        <div id="turns-heading"><span id="turns"></span><span id="turns-project"></span></div>
         <div id="show-lucky"></div>
         <div class="hide" id="all_nums"></div>
 
@@ -37,7 +37,8 @@
             var lucky=new Lucky({
                 'initNum':[1,40],//参与抽奖号码范围，必须
                 'numPwrap':'show-lucky',//必须
-                'turnsWrap':'turns-heading',//必须
+                'turnsWrap':'turns',//轮次标题 显示第几轮 必须
+                'turnsProWrap':'turns-project',//轮次抽奖项目容器 必须
                 // 'smTitle':['200元代金券','300元代金券','500元代金券','免费种植牙'],//轮次小标题 必须
                 'smTitle':[
                     ['免费德国明星全瓷牙','免费德国ICX种植体'],

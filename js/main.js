@@ -4,17 +4,18 @@
  */
 class Lucky{
     constructor(params){
-        // initNum=[1,40],numPwrap,turnsWrap,smTitle=[],selfNum=[],runSpeed=30
+        // initNum=[1,40],numPwrap,turnsProWrap,smTitle=[],selfNum=[],runSpeed=30
         /*this.startNum=initNum[0];//参与抽奖的起始号码
         this.endNum=initNum[1];//参与抽奖的结束号码
         this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
-        this.turnsWrap=document.getElementById(turnsWrap);//显示轮次容器
+        this.turnsProWrap=document.getElementById(turnsProWrap);//显示轮次容器
         this.smTitle=smTitle;//轮次小标题
         this.selfNum=selfNum;//每轮内定号码 传一个二维数组*/
 
         this.startNum=params.initNum[0];//参与抽奖的起始号码 必填参数
         this.endNum=params.initNum[1];//参与抽奖的结束号码 必填参数
         this.numPwrap=document.getElementById(params.numPwrap);//号码显示父容器 必填参数
+        this.turnsProWrap=document.getElementById(params.turnsProWrap);//显示抽奖项目容器 必填参数
         this.turnsWrap=document.getElementById(params.turnsWrap);//显示轮次容器 必填参数
         this.smTitle=params.smTitle || [];//轮次小标题 必填参数
         this.selfNum=params.selfNum || [];//每轮内定号码 传一个二维数组
@@ -32,6 +33,7 @@ class Lucky{
         this.timer=null;//定时器
         this.oLocalStorage=window.localStorage;//本地存储对象
         this.turn=1;//抽奖轮次编号 按左右方向键进行切换
+        this.pro=0;//轮次内部项目索引
 
         this.runStatus=false;//抽奖状态 正在滚动或者已经停止
 
@@ -97,7 +99,7 @@ class Lucky{
             }
 
             // 左右方向键切换抽奖轮次，Ctrl + z清除localStorage
-            switch (oEvent.keyCode || oEvent.ctrlKey ) {
+            switch (oEvent.keyCode || oEvent.ctrlKey) {
                 case 37:
                     if(this.runStatus){
                         return false;//未停止抽奖不允许进行键盘切换
@@ -126,6 +128,16 @@ class Lucky{
                     break;
                 case 90 || true:
                     this.oLocalStorage.clear();
+                    break;
+
+                case 40:
+                    // 下方向键切换轮次内部抽奖项目
+                    this.pro+=1;
+                    // console.log(this.pro)
+                    if(this.pro+1>this.smTitle[this.turn-1].length){
+                        this.pro=0;
+                    }
+                    this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1][this.pro]}`;
                     break;
                 default:
                     break;
@@ -262,15 +274,21 @@ class Lucky{
     // 将中奖号码填充到页面 && 轮次标题填充
     fill(){
 
+        // 切换抽奖轮次
         if(this.smTitle[this.turn-1]){
             if(this.isShowTurn){
-                this.turnsWrap.innerHTML=`第${this.turn}轮${this.smTitle[this.turn-1]}`;
+                // this.turnsProWrap.innerHTML=`第${this.turn}轮：${this.smTitle[this.turn-1][0]}`;
+                this.turnsWrap.innerHTML=`第${this.turn}轮：`;
+                this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1][this.pro]}`;
             }else{
-                this.turnsWrap.innerHTML=`${this.smTitle[this.turn-1]}`;
+                // this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1][this.pro]}`;
+                this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1][this.pro]}`;
             }
         }else{
-            this.turnsWrap.innerHTML=`第${this.turn}轮`;
+            this.turnsProWrap.innerHTML=`第${this.turn}轮`;//如果没有配置项目标题
         }
+
+        // 填充中奖号码
         this.numPwrap.innerHTML='';
         // this.d=0;
         if(this.getLocalStorage(this.turn)){
@@ -278,13 +296,15 @@ class Lucky{
         }else{
 
         }
+
+
     }
 
     // 显示全部中奖号码
     showAllLucky(){
         this.numPwrap.innerHTML='';
         this.numPwrap.innerHTML='恭喜本次活动所有中奖号码：<br />';
-        this.turnsWrap.style.display = 'none';
+        this.turnsProWrap.style.display = 'none';
         // console.log(this.oLocalStorage.length);//object
         for(let i=1;i<=this.totalTurns;i++){
             if(this.oLocalStorage.getItem(i)){
