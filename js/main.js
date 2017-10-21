@@ -39,6 +39,8 @@ class Lucky{
 
         this.playM=document.getElementById('play-music');//滚动音效对象
         this.stopM=document.getElementById('stop-music');//停止音效对象
+
+        this.oSave={};//临时存储中奖信息的对象
     }
 
     init(){
@@ -256,11 +258,28 @@ class Lucky{
 
     //将中奖号码进行存储
     saveLuckyNum(num){
-        if(!this.oLocalStorage[this.turn]){//如果次轮抽奖结果没有存储就进行存储
+        /*if(!this.oLocalStorage[this.turn]){//如果此轮抽奖结果没有存储就进行存储
             this.oLocalStorage.setItem(this.turn,num);
         }else{
             this.oLocalStorage.setItem(this.turn,`${this.getLocalStorage(this.turn)}、${num}`);
+        }*/
+
+        var s=this.turnsProWrap.innerHTML;
+        if(!this.oLocalStorage[this.turn]){//如果此轮抽奖结果没有存储就进行存储
+            this.oSave={};
+
         }
+        if(!this.oSave[s]){
+            this.oSave[s]=[];
+
+            this.oSave[s].push(num);
+        }else{
+            this.oSave[s].push(num);
+        }
+
+
+        var tmp=JSON.stringify(this.oSave);
+        this.oLocalStorage.setItem(this.turn,tmp);
     }
 
     getLocalStorage(turn){
@@ -276,6 +295,7 @@ class Lucky{
 
         // 切换抽奖轮次
         if(this.smTitle[this.turn-1]){
+            this.pro=0;
             if(this.isShowTurn){
                 // this.turnsProWrap.innerHTML=`第${this.turn}轮：${this.smTitle[this.turn-1][0]}`;
                 this.turnsWrap.innerHTML=`第${this.turn}轮：`;
@@ -288,11 +308,15 @@ class Lucky{
             this.turnsProWrap.innerHTML=`第${this.turn}轮`;//如果没有配置项目标题
         }
 
-        // 填充中奖号码
+        // 填充本轮中奖号码
         this.numPwrap.innerHTML='';
         // this.d=0;
         if(this.getLocalStorage(this.turn)){
-            this.numPwrap.innerHTML=`<span class="show">恭喜本轮中奖号码：${this.getLocalStorage(this.turn)}</span>`;
+            // console.log(JSON.parse(this.getLocalStorage(this.turn)))
+            this.numPwrap.innerHTML+=`<span class="show">恭喜本轮中奖号码：<br>`;
+            for (var variable in JSON.parse(this.getLocalStorage(this.turn))) {
+                this.numPwrap.innerHTML+=`${variable}：${JSON.parse(this.getLocalStorage(this.turn))[variable]}</span><br>`;
+            }
         }else{
 
         }
@@ -304,12 +328,19 @@ class Lucky{
     showAllLucky(){
         this.numPwrap.innerHTML='';
         this.numPwrap.innerHTML='恭喜本次活动所有中奖号码：<br />';
-        this.turnsProWrap.style.display = 'none';
+        this.turnsProWrap.parentNode.style.display = 'none';
         // console.log(this.oLocalStorage.length);//object
         for(let i=1;i<=this.totalTurns;i++){
             if(this.oLocalStorage.getItem(i)){
                 if(this.isShowTurn){
-                    this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
+                    // this.numPwrap.innerHTML+=`<span class="turnShow">第${i}轮：</span>`;
+                    for (var variable in JSON.parse(this.oLocalStorage.getItem(i))) {
+                        this.numPwrap.innerHTML+=`
+                            <div class="show"><span class="turnShow">第${i}轮</span>${variable}：${JSON.parse(this.oLocalStorage.getItem(i))[variable]}</div>
+                        `;
+                        console.log(JSON.parse(this.oLocalStorage.getItem(i)))
+                    }
+                    // this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
                 }else{
                     this.numPwrap.innerHTML+=`<div class="show">${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
                 }
