@@ -136,10 +136,10 @@ class Lucky{
                     // 下方向键切换轮次内部抽奖项目
                     this.pro+=1;
                     // console.log(this.pro)
-                    if(this.pro+1>this.smTitle[this.turn-1].length){
+                    if(this.pro+1>this.smTitle[this.turn-1].tit.length){
                         this.pro=0;
                     }
-                    this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1][this.pro]}`;
+                    this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1].tit[this.pro]}`;
                     break;
                 default:
                     break;
@@ -162,15 +162,23 @@ class Lucky{
     //从数组中移除指定值
     removeLuckyNum(num,arr){
         // 数组扩展方法 从数组删除指定元素
-        Array.prototype.removeByValue = function(val) {
+        /*Array.prototype.removeByValue = function(val) {
             for (var i = 0; i < this.length; i++) {
                 if (this[i] == val) {
                     this.splice(i, 1);
-                    break;
+                    // break;
+                }
+            }
+        }*/
+        for(var i=0;i<=num.length;i++){
+            // arr.removeByValue(num[i]);
+            for (var j = 0; j < arr.length; j++) {
+                if (arr[j] == num[i]) {
+                    arr.splice(j, 1);
+                    // break;
                 }
             }
         }
-        arr.removeByValue(num);
         return arr;
     }
 
@@ -179,10 +187,32 @@ class Lucky{
      * [getLucky 从参与抽奖号码中随机获取中奖号码]
      * @return {[number]} [带前导0的数字]
      */
-    getLucky(arr){
-        let randomNum=Math.floor(Math.random() * arr.length);//随机抽取一个中奖号码
+    getLucky(arr,count){
+        /*let randomNum=Math.floor(Math.random() * arr.length);//随机抽取指定个数的号码
         // alert(arr[randomNum]);
-        return arr[randomNum];
+        return arr[randomNum];*/
+        //新建一个数组,将传入的数组复制过来,用于运算,而不要直接操作传入的数组;
+        var temp_array = new Array();
+        for (var index in arr) {
+            temp_array.push(arr[index]);
+        }
+        //取出的数值项,保存在此数组
+        var return_array = new Array();
+        for (var i = 0; i<count; i++) {
+            //判断如果数组还有可以取出的元素,以防下标越界
+            if (temp_array.length>0) {
+                //在数组中产生一个随机索引
+                var arrIndex = Math.floor(Math.random()*temp_array.length);
+                //将此随机索引的对应的数组元素值复制出来
+                return_array[i] = temp_array[arrIndex];
+                //然后删掉此索引的数组元素,这时候temp_array变为新的数组
+                temp_array.splice(arrIndex, 1);
+            } else {
+                //数组中数据项取完后,退出循环,比如数组本来只有10项,但要求取出20项.
+                break;
+            }
+        }
+        return return_array;
     }
 
 
@@ -226,9 +256,10 @@ class Lucky{
             this.selfNum[this.turn-1]=this.removeLuckyNum(this.luckyNum,this.selfNum[this.turn-1]);//从内定号码数组中移除中奖号码
         }else{
 
-            this.luckyNum=this.getLucky(this.aJoinNum);//随机抽取一个号码
+            this.luckyNum=this.getLucky(this.aJoinNum,this.smTitle[this.turn-1].luckyCount[this.pro]);//随机抽取指定个数的号码 array
         }
         console.log(`中奖号码：${this.luckyNum}`);
+
 
 
 
@@ -294,15 +325,17 @@ class Lucky{
     fill(){
 
         // 切换抽奖轮次
-        if(this.smTitle[this.turn-1]){
+        // console.log(this.smTitle[this.turn-1].tit)
+        if(this.smTitle[this.turn-1].tit){
             this.pro=0;
             if(this.isShowTurn){
                 // this.turnsProWrap.innerHTML=`第${this.turn}轮：${this.smTitle[this.turn-1][0]}`;
                 this.turnsWrap.innerHTML=`第${this.turn}轮：`;
-                this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1][this.pro]}`;
+
+                this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1].tit[this.pro]}`;
             }else{
                 // this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1][this.pro]}`;
-                this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1][this.pro]}`;
+                this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1].tit[this.pro]}`;
             }
         }else{
             this.turnsProWrap.innerHTML=`第${this.turn}轮`;//如果没有配置项目标题
