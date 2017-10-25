@@ -12,17 +12,18 @@ var Lucky = function () {
     function Lucky(params) {
         _classCallCheck(this, Lucky);
 
-        // initNum=[1,40],numPwrap,turnsWrap,smTitle=[],selfNum=[],runSpeed=30
+        // initNum=[1,40],numPwrap,turnsProWrap,smTitle=[],selfNum=[],runSpeed=30
         /*this.startNum=initNum[0];//参与抽奖的起始号码
         this.endNum=initNum[1];//参与抽奖的结束号码
         this.numPwrap=document.getElementById(numPwrap);//号码显示父容器
-        this.turnsWrap=document.getElementById(turnsWrap);//显示轮次容器
+        this.turnsProWrap=document.getElementById(turnsProWrap);//显示轮次容器
         this.smTitle=smTitle;//轮次小标题
         this.selfNum=selfNum;//每轮内定号码 传一个二维数组*/
 
         this.startNum = params.initNum[0]; //参与抽奖的起始号码 必填参数
         this.endNum = params.initNum[1]; //参与抽奖的结束号码 必填参数
         this.numPwrap = document.getElementById(params.numPwrap); //号码显示父容器 必填参数
+        this.turnsProWrap = document.getElementById(params.turnsProWrap); //显示抽奖项目容器 必填参数
         this.turnsWrap = document.getElementById(params.turnsWrap); //显示轮次容器 必填参数
         this.smTitle = params.smTitle || []; //轮次小标题 必填参数
         this.selfNum = params.selfNum || []; //每轮内定号码 传一个二维数组
@@ -39,11 +40,14 @@ var Lucky = function () {
         this.timer = null; //定时器
         this.oLocalStorage = window.localStorage; //本地存储对象
         this.turn = 1; //抽奖轮次编号 按左右方向键进行切换
+        this.pro = 0; //轮次内部项目索引
 
         this.runStatus = false; //抽奖状态 正在滚动或者已经停止
 
         this.playM = document.getElementById('play-music'); //滚动音效对象
         this.stopM = document.getElementById('stop-music'); //停止音效对象
+
+        this.oSave = {}; //临时存储中奖信息的对象
     }
 
     _createClass(Lucky, [{
@@ -134,6 +138,16 @@ var Lucky = function () {
                         break;
                     case 90 || true:
                         _this.oLocalStorage.clear();
+                        break;
+
+                    case 40:
+                        // 下方向键切换轮次内部抽奖项目
+                        _this.pro += 1;
+                        // console.log(this.pro)
+                        if (_this.pro + 1 > _this.smTitle[_this.turn - 1].length) {
+                            _this.pro = 0;
+                        }
+                        _this.turnsProWrap.innerHTML = '' + _this.smTitle[_this.turn - 1][_this.pro];
                         break;
                     default:
                         break;
@@ -273,12 +287,27 @@ var Lucky = function () {
     }, {
         key: 'saveLuckyNum',
         value: function saveLuckyNum(num) {
+            /*if(!this.oLocalStorage[this.turn]){//如果此轮抽奖结果没有存储就进行存储
+                this.oLocalStorage.setItem(this.turn,num);
+            }else{
+                this.oLocalStorage.setItem(this.turn,`${this.getLocalStorage(this.turn)}、${num}`);
+            }*/
+
+            var s = this.turnsProWrap.innerHTML;
             if (!this.oLocalStorage[this.turn]) {
-                //如果次轮抽奖结果没有存储就进行存储
-                this.oLocalStorage.setItem(this.turn, num);
-            } else {
-                this.oLocalStorage.setItem(this.turn, this.getLocalStorage(this.turn) + '\u3001' + num);
+                //如果此轮抽奖结果没有存储就进行存储
+                this.oSave = {};
             }
+            if (!this.oSave[s]) {
+                this.oSave[s] = [];
+
+                this.oSave[s].push(num);
+            } else {
+                this.oSave[s].push(num);
+            }
+
+            var tmp = JSON.stringify(this.oSave);
+            this.oLocalStorage.setItem(this.turn, tmp);
         }
     }, {
         key: 'getLocalStorage',
@@ -296,19 +325,30 @@ var Lucky = function () {
         key: 'fill',
         value: function fill() {
 
+            // 切换抽奖轮次
             if (this.smTitle[this.turn - 1]) {
+                this.pro = 0;
                 if (this.isShowTurn) {
-                    this.turnsWrap.innerHTML = '\u7B2C' + this.turn + '\u8F6E' + this.smTitle[this.turn - 1];
+                    // this.turnsProWrap.innerHTML=`第${this.turn}轮：${this.smTitle[this.turn-1][0]}`;
+                    this.turnsWrap.innerHTML = '\u7B2C' + this.turn + '\u8F6E\uFF1A';
+                    this.turnsProWrap.innerHTML = '' + this.smTitle[this.turn - 1][this.pro];
                 } else {
-                    this.turnsWrap.innerHTML = '' + this.smTitle[this.turn - 1];
+                    // this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1][this.pro]}`;
+                    this.turnsProWrap.innerHTML = '' + this.smTitle[this.turn - 1][this.pro];
                 }
             } else {
-                this.turnsWrap.innerHTML = '\u7B2C' + this.turn + '\u8F6E';
+                this.turnsProWrap.innerHTML = '\u7B2C' + this.turn + '\u8F6E'; //如果没有配置项目标题
             }
+
+            // 填充本轮中奖号码
             this.numPwrap.innerHTML = '';
             // this.d=0;
             if (this.getLocalStorage(this.turn)) {
-                this.numPwrap.innerHTML = '<span class="show">\u606D\u559C\u672C\u8F6E\u4E2D\u5956\u53F7\u7801\uFF1A' + this.getLocalStorage(this.turn) + '</span>';
+                // console.log(JSON.parse(this.getLocalStorage(this.turn)))
+                this.numPwrap.innerHTML += '<span class="show">\u606D\u559C\u672C\u8F6E\u4E2D\u5956\u53F7\u7801\uFF1A<br>';
+                for (var variable in JSON.parse(this.getLocalStorage(this.turn))) {
+                    this.numPwrap.innerHTML += variable + '\uFF1A' + JSON.parse(this.getLocalStorage(this.turn))[variable] + '</span><br>';
+                }
             } else {}
         }
 
@@ -319,12 +359,17 @@ var Lucky = function () {
         value: function showAllLucky() {
             this.numPwrap.innerHTML = '';
             this.numPwrap.innerHTML = '恭喜本次活动所有中奖号码：<br />';
-            this.turnsWrap.style.display = 'none';
+            this.turnsProWrap.parentNode.style.display = 'none';
             // console.log(this.oLocalStorage.length);//object
             for (var i = 1; i <= this.totalTurns; i++) {
                 if (this.oLocalStorage.getItem(i)) {
                     if (this.isShowTurn) {
-                        this.numPwrap.innerHTML += '<div class="show">\u7B2C' + i + '\u8F6E' + this.smTitle[i - 1] + '\u4E2D\u5956\u53F7\u7801\uFF1A' + this.oLocalStorage.getItem(i) + '</div>';
+                        // this.numPwrap.innerHTML+=`<span class="turnShow">第${i}轮：</span>`;
+                        for (var variable in JSON.parse(this.oLocalStorage.getItem(i))) {
+                            this.numPwrap.innerHTML += '\n                            <div class="show"><span class="turnShow">\u7B2C' + i + '\u8F6E</span>' + variable + '\uFF1A' + JSON.parse(this.oLocalStorage.getItem(i))[variable] + '</div>\n                        ';
+                            console.log(JSON.parse(this.oLocalStorage.getItem(i)));
+                        }
+                        // this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
                     } else {
                         this.numPwrap.innerHTML += '<div class="show">' + this.smTitle[i - 1] + '\u4E2D\u5956\u53F7\u7801\uFF1A' + this.oLocalStorage.getItem(i) + '</div>';
                     }

@@ -17,8 +17,8 @@
         <audio id="play-music" src="music/run.mp3" loop></audio>
         <audio id="stop-music" src="music/stop.mp3"></audio>
     </div>
-    <script src="js/main.js"></script>
-    <!-- <script src="js/es5.js"></script> -->
+    <!-- <script src="js/main.js"></script> -->
+    <script src="js/es5.js"></script>
     <script>
         window.onload=function(){
             if(!window.localStorage){
@@ -33,23 +33,47 @@
             ];//每轮内定号码，没有内定号码就设置空数组
 
             // var selfNum=[];
-
+            var luckyCount=[
+                []
+            ];
             var lucky=new Lucky({
                 'initNum':[1,50],//参与抽奖号码范围，必须
                 'numPwrap':'show-lucky',//必须
                 'turnsWrap':'turns',//轮次标题 显示第几轮 必须
                 'turnsProWrap':'turns-project',//轮次抽奖项目容器 必须
                 // 'smTitle':['200元代金券','300元代金券','500元代金券','免费种植牙'],//轮次小标题 必须
-                'smTitle':[
+                /*'smTitle':[
                     ['免费德国明星全瓷牙','免费德国ICX种植体'],
                     ['免费德国明星全瓷牙','免费德国ICX种植体'],
                     ['免费德国明星全瓷牙','免费德国ICX种植体','免费以色列科特斯种植体'],
                     ['免费德国明星全瓷牙','免费德国ICX种植体','免费ITI种植体']
-                ],//轮次小标题 必须
+                ],//轮次小标题 必须*/
+                'smTitle':[
+                    {
+                        "tit":['免费德国明星全瓷牙','免费德国ICX种植体'],
+                        "luckyCount":[3,2],//每次抽出来的中奖个数
+                        "selfNum":[]
+                    },
+                    {
+                        "tit":['免费德国明星全瓷牙','免费德国ICX种植体'],
+                        "luckyCount":[4,2],//每次抽出来的中奖个数
+                        "selfNum":[]
+                    },
+                    {
+                        "tit":['免费德国明星全瓷牙','免费德国ICX种植体','免费以色列科特斯种植体'],
+                        "luckyCount":[5,2,2],//每次抽出来的中奖个数
+                        "selfNum":[]
+                    },
+                    {
+                        "tit":['免费德国明星全瓷牙','免费德国ICX种植体','免费ITI种植体'],
+                        "luckyCount":[5,2,2],//每次抽出来的中奖个数
+                        "selfNum":[]
+                    }
+                ],//没轮抽奖信息配置包括轮次小标题、每轮内定号码、每次抽出的个数
                 'runSpeed':30,//号码滚动速度
                 'isPlay':true,//是否播放音效
                 'isShowTurn':true,//是否显示轮次标题
-                'selfNum':selfNum//内定号码
+                // 'selfNum':selfNum//内定号码
             });
             lucky.init();
         }
