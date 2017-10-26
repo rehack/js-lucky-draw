@@ -140,6 +140,7 @@ class Lucky{
                         this.pro=0;
                     }
                     this.turnsProWrap.innerHTML=`${this.smTitle[this.turn-1].tit[this.pro]}`;
+                    this.numPwrap.innerHTML='';
                     break;
                 default:
                     break;
