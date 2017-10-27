@@ -11,7 +11,7 @@ class Lucky{
         this.turnsProWrap=document.getElementById(turnsProWrap);//显示轮次容器
         this.smTitle=smTitle;//轮次小标题
         this.selfNum=selfNum;//每轮内定号码 传一个二维数组*/
-
+        this.initNum=params.initNum;//
         this.startNum=params.initNum[0];//参与抽奖的起始号码 必填参数
         this.endNum=params.initNum[1];//参与抽奖的结束号码 必填参数
         this.numPwrap=document.getElementById(params.numPwrap);//号码显示父容器 必填参数
@@ -25,7 +25,7 @@ class Lucky{
 
 
 
-        this.digits=this.endNum.toString().length;//中奖号码显示的位数
+        this.digits=this.initNum[this.initNum.length-1].toString().length;//中奖号码显示的位数
         this.aJoinNum=[];
         this.totalTurns=this.smTitle.length;//总抽奖轮次
         this.luckyNum=null;//中奖号码
@@ -46,29 +46,39 @@ class Lucky{
     init(){
         // 如果还没有存储参与抽奖号码就进行存储
         if(!this.oLocalStorage.getItem("sJoinNum")){
-            // 得到参与抽奖号码数组
-            let arr=[];
-            for(let i=this.startNum;i<=this.endNum;i++){
+            if(this.initNum.length==2){//如果是设置的[1,30]这种连续号码段
+                // 得到参与抽奖号码数组
+                let arr=[];
+                for(let i=this.startNum;i<=this.endNum;i++){
 
-                let j=this.buquan(i,this.digits)
-                arr.push(j);
+                    let j=this.buquan(i,this.digits);//补全
+                    arr.push(j);
 
 
-                for(var a=0;a<this.selfNum.length;a++){
+                    for(var a=0;a<this.selfNum.length;a++){
 
-                    for(var b=0;b<this.selfNum[a].length;b++){
-                        // console(1)
-                        this.buquan(this.selfNum[a][b],this.digits);
-                        // console.log(this.selfNum[a][b])
-                        this.removeLuckyNum(this.buquan(this.selfNum[a][b],this.digits),arr);
-                        // this.removeLuckyNum[1,arr];
+                        for(var b=0;b<this.selfNum[a].length;b++){
+                            // console(1)
+                            this.buquan(this.selfNum[a][b],this.digits);
+                            // console.log(this.selfNum[a][b])
+                            this.removeLuckyNum(this.buquan(this.selfNum[a][b],this.digits),arr);
+                            // this.removeLuckyNum[1,arr];
+                        }
                     }
                 }
+                // console.log('arr'+arr)
+                // let str = JSON.stringify(arr);
+                let str = arr.join(',');
+                localStorage.setItem("sJoinNum",str);
+            }else{
+                let arr=[];
+                for (var i = 0; i <this.initNum.length; i++) {
+                    arr.push(this.buquan(this.initNum[i],this.digits));
+                }
+                let str = arr.join(',');
+                localStorage.setItem("sJoinNum",str);
             }
-            // console.log('arr'+arr)
-            // let str = JSON.stringify(arr);
-            let str = arr.join(',');
-            localStorage.setItem("sJoinNum",str);
+
         }else{
             console.log(`已经存储了aJoinNum${this.oLocalStorage.getItem('sJoinNum')}`);
         }

@@ -19,7 +19,7 @@ var Lucky = function () {
         this.turnsProWrap=document.getElementById(turnsProWrap);//显示轮次容器
         this.smTitle=smTitle;//轮次小标题
         this.selfNum=selfNum;//每轮内定号码 传一个二维数组*/
-
+        this.initNum = params.initNum; //
         this.startNum = params.initNum[0]; //参与抽奖的起始号码 必填参数
         this.endNum = params.initNum[1]; //参与抽奖的结束号码 必填参数
         this.numPwrap = document.getElementById(params.numPwrap); //号码显示父容器 必填参数
@@ -32,7 +32,7 @@ var Lucky = function () {
         this.isShowTurn = params.isShowTurn; //是否显示轮次标题
 
 
-        this.digits = this.endNum.toString().length; //中奖号码显示的位数
+        this.digits = this.initNum[this.initNum.length - 1].toString().length; //中奖号码显示的位数
         this.aJoinNum = [];
         this.totalTurns = this.smTitle.length; //总抽奖轮次
         this.luckyNum = null; //中奖号码
@@ -57,28 +57,38 @@ var Lucky = function () {
 
             // 如果还没有存储参与抽奖号码就进行存储
             if (!this.oLocalStorage.getItem("sJoinNum")) {
-                // 得到参与抽奖号码数组
-                var arr = [];
-                for (var i = this.startNum; i <= this.endNum; i++) {
+                if (this.initNum.length == 2) {
+                    //如果是设置的[1,30]这种连续号码段
+                    // 得到参与抽奖号码数组
+                    var arr = [];
+                    for (var _i = this.startNum; _i <= this.endNum; _i++) {
 
-                    var j = this.buquan(i, this.digits);
-                    arr.push(j);
+                        var j = this.buquan(_i, this.digits); //补全
+                        arr.push(j);
 
-                    for (var a = 0; a < this.selfNum.length; a++) {
+                        for (var a = 0; a < this.selfNum.length; a++) {
 
-                        for (var b = 0; b < this.selfNum[a].length; b++) {
-                            // console(1)
-                            this.buquan(this.selfNum[a][b], this.digits);
-                            // console.log(this.selfNum[a][b])
-                            this.removeLuckyNum(this.buquan(this.selfNum[a][b], this.digits), arr);
-                            // this.removeLuckyNum[1,arr];
+                            for (var b = 0; b < this.selfNum[a].length; b++) {
+                                // console(1)
+                                this.buquan(this.selfNum[a][b], this.digits);
+                                // console.log(this.selfNum[a][b])
+                                this.removeLuckyNum(this.buquan(this.selfNum[a][b], this.digits), arr);
+                                // this.removeLuckyNum[1,arr];
+                            }
                         }
                     }
+                    // console.log('arr'+arr)
+                    // let str = JSON.stringify(arr);
+                    var str = arr.join(',');
+                    localStorage.setItem("sJoinNum", str);
+                } else {
+                    var _arr = [];
+                    for (var i = 0; i < this.initNum.length; i++) {
+                        _arr.push(this.buquan(this.initNum[i], this.digits));
+                    }
+                    var _str = _arr.join(',');
+                    localStorage.setItem("sJoinNum", _str);
                 }
-                // console.log('arr'+arr)
-                // let str = JSON.stringify(arr);
-                var str = arr.join(',');
-                localStorage.setItem("sJoinNum", str);
             } else {
                 console.log('\u5DF2\u7ECF\u5B58\u50A8\u4E86aJoinNum' + this.oLocalStorage.getItem('sJoinNum'));
             }
