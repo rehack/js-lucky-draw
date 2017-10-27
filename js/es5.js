@@ -31,7 +31,7 @@ var Lucky = function () {
         this.isShowTurn = params.isShowTurn; //是否显示轮次标题
 
 
-        this.digits = this.endNum.toString().length; //中奖号码显示的位数
+        this.digits = this.initNum[this.initNum.length - 1].toString().length; //中奖号码显示的位数
         this.aJoinNum = [];
         this.totalTurns = this.smTitle.length; //总抽奖轮次
         this.luckyNum = null; //中奖号码
