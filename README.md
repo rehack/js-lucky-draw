@@ -7,3 +7,12 @@
 5. 方向上键可以查询所有中奖记录
 6. 本项目中安装好了Babel，直接在本项目根目录执行`npm run build` 即可编译es6->es5
 7. 在IE9+下面运行改程序，必须先将该程序放到服务器环境，否则`IE doesn't support localStorage for local files`
+
+## 项目使用：
+``` bash
+# 安装项目所需依赖
+npm install
+
+# 编译ES6
+npm run build
+```
