@@ -55,15 +55,21 @@ class Lucky{
                     arr.push(j);
 
 
-                    for(var a=0;a<this.selfNum.length;a++){
 
-                        for(var b=0;b<this.selfNum[a].length;b++){
-                            // console(1)
-                            this.buquan(this.selfNum[a][b],this.digits);
-                            // console.log(this.selfNum[a][b])
-                            this.removeLuckyNum(this.buquan(this.selfNum[a][b],this.digits),arr);
-                            // this.removeLuckyNum[1,arr];
+                }
+
+                for(var a=0;a<this.selfNum.length;a++){
+
+                    for(var b=0;b<this.selfNum[a].length;b++){
+                        // console(1)
+                        for(var c= 0;c<this.selfNum[a][b].length;c++){
+
+                            this.buquan(this.selfNum[a][b][c],this.digits);
+                            this.removeLuckyNum(this.buquan(this.selfNum[a][b][c],this.digits),arr);
                         }
+                        // console.log(this.selfNum[a][b])
+                        // this.removeLuckyNum(this.buquan(this.selfNum[a][b],this.digits),arr);
+                        // this.removeLuckyNum[1,arr];
                     }
                 }
                 // console.log('arr'+arr)
@@ -173,23 +179,15 @@ class Lucky{
     //从数组中移除指定值
     removeLuckyNum(num,arr){
         // 数组扩展方法 从数组删除指定元素
-        /*Array.prototype.removeByValue = function(val) {
+        Array.prototype.removeByValue = function(val) {
             for (var i = 0; i < this.length; i++) {
                 if (this[i] == val) {
                     this.splice(i, 1);
-                    // break;
-                }
-            }
-        }*/
-        for(var i=0;i<=num.length;i++){
-            // arr.removeByValue(num[i]);
-            for (var j = 0; j < arr.length; j++) {
-                if (arr[j] == num[i]) {
-                    arr.splice(j, 1);
-                    // break;
+                    break;
                 }
             }
         }
+        arr.removeByValue(num);
         return arr;
     }
 
@@ -213,11 +211,16 @@ class Lucky{
             //判断如果数组还有可以取出的元素,以防下标越界
             if (temp_array.length>0) {
                 //在数组中产生一个随机索引
-                var arrIndex = Math.floor(Math.random()*temp_array.length);
-                //将此随机索引的对应的数组元素值复制出来
-                return_array[i] = temp_array[arrIndex];
-                //然后删掉此索引的数组元素,这时候temp_array变为新的数组
-                temp_array.splice(arrIndex, 1);
+                var arrIndex = Math.floor(Math.random()*(temp_array.length-1));
+                // console.log('length'+temp_array.length)
+                // console.log('随机：'+arrIndex)
+                if(temp_array[arrIndex]){
+                    //将此随机索引的对应的数组元素值复制出来
+                    return_array[i] = temp_array[arrIndex];
+                    //然后删掉此索引的数组元素,这时候temp_array变为新的数组
+                    temp_array.splice(arrIndex, 1);
+                }
+
             } else {
                 //数组中数据项取完后,退出循环,比如数组本来只有10项,但要求取出20项.
                 break;
@@ -260,22 +263,30 @@ class Lucky{
         }
         // alert(this.turn)
         // alert(this.selfNum[this.turn-1])
-        if(this.selfNum.length>0 && this.selfNum[this.turn-1].length>0){
-            // alert(1)
-            this.luckyNum=this.buquan(this.getLucky(this.selfNum[this.turn-1]),this.digits);
-
-            this.selfNum[this.turn-1]=this.removeLuckyNum(this.luckyNum,this.selfNum[this.turn-1]);//从内定号码数组中移除中奖号码
+        if(this.selfNum.length>0 && this.selfNum[this.turn-1][this.pro]){
+            var a = this.getLucky(this.aJoinNum,this.smTitle[this.turn-1].luckyCount[this.pro]-this.selfNum[this.turn-1][this.pro].length);
+            var luckyNum =[];
+            for(var i=0;i<a.length;i++){
+                luckyNum.push(this.buquan(a[i],this.digits));
+            }
+            this.luckyNum=luckyNum.concat(this.selfNum[this.turn-1][this.pro]);
+            // this.luckyNum=luckyNum;
+            var aa =this.luckyNum;
+            // this.selfNum[this.turn-1][this.pro]=this.removeLuckyNum(this.luckyNum,this.selfNum[this.turn-1]);//从内定号码数组中移除中奖号码
+            this.selfNum[this.turn-1][this.pro]=[];//从内定号码数组中移除中奖号码
         }else{
 
             this.luckyNum=this.getLucky(this.aJoinNum,this.smTitle[this.turn-1].luckyCount[this.pro]);//随机抽取指定个数的号码 array
         }
-        console.log(`中奖号码：${this.luckyNum}`);
+        // console.log(`中奖号码：${this.luckyNum}`);
 
 
 
-
-        let arr=this.removeLuckyNum(this.luckyNum,this.aJoinNum);//移除该中奖号码
-
+        for(var i=0;i<this.luckyNum.length;i++){
+            var b =this.luckyNum[i];
+            this.removeLuckyNum(this.luckyNum[i],this.aJoinNum);//移除该中奖号码
+        }
+        var arr=this.aJoinNum;
         this.oLocalStorage.setItem('sJoinNum',arr);//出现存储剩余号码，更新参与抽奖号码
         console.log(`抽取后剩余号码：${this.aJoinNum}--个数${this.aJoinNum.length}`);
         this.saveLuckyNum(this.luckyNum);//存储
