@@ -51,4 +51,5 @@ body{font-family: 微软雅黑,Arial;font-weight: bold;width: 100%;height: 100%;
 #show-lucky .num,#show-lucky b{max-width:90%;word-wrap:break-word;display: inline-block;text-align: center;font-size: 5rem;border: 5px solid #fff;padding: 15px;margin: 10px;}
 #show-lucky .show{border: none;/* font-size: 50px; */text-align: left;}
 #show-lucky .turnShow{text-align: left;color:#facd89;}
-.qrcode{width: 150px;height:150px;display: block;position: absolute;bottom: 10px;left: 50%;margin-left: -75px;}
+.qrcode{display: block;position: absolute;bottom: 20px;left: 50%;margin-left: -75px;color: #fff;}
+.qrcode img{width: 150px;height:150px;}
