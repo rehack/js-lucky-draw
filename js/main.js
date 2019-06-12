@@ -333,7 +333,7 @@ class Lucky{
             console.log('已经抽过了')
             // this.oSave['other'] = tmpObj JSON.stringify不能读关联数组
         }
-        // console.log(this.oSave)
+        console.log(this.oSave)
 
 
         
@@ -380,7 +380,9 @@ class Lucky{
             //     this.numPwrap.innerHTML+=`${variable}：${JSON.parse(this.getLocalStorage(this.turn))[variable]}</span><br>`;
             // }
             currentTurnData.map(item => {
-                this.numPwrap.innerHTML += `${item.title}:${item.num}<br>`
+                if(item){ //判断如果切换的时候有些轮次还没有抽取 item为null
+                    this.numPwrap.innerHTML += `${item.title}:${item.num}<br>`
+                }
             })
         }else{
 
