@@ -35,11 +35,11 @@ body{font-family: 微软雅黑,Arial;font-weight: bold;}
     /* text-align: center; */
     border-radius: 10px;
     color: #facd89;
-    font-size: 3em;
-    margin-top: 90px;
+    font-size: 42px;
+    margin-top: 66px;
 }
 #turns-heading #turns{
-    font-size: 2em;
+    font-size: 70px;
 }
 #show-lucky{
     /* width: 80%; */
@@ -52,8 +52,8 @@ body{font-family: 微软雅黑,Arial;font-weight: bold;}
     /* overflow-y: auto; */
 
 }
-#show-lucky .num,#show-lucky b{display: inline-block;text-align: center;font-size: 10rem;padding: 15px;}
-#show-lucky .current-lucky-num{display:inline-block;font-size: 2.3em;background: #facd89;color: #f00;margin: 15px auto;padding: 20px;border-radius: 5px;}/*当前滚动出的中奖号码*/
+#show-lucky .num,#show-lucky b{display: inline-block;text-align: center;font-size: 95px;padding: 15px;}
+#show-lucky .current-lucky-num{display:inline-block;font-size: 50px;background: #facd89;color: #f00;margin: 15px auto;padding: 20px;border-radius: 5px;}/*当前滚动出的中奖号码*/
 
 /* 最后显示所有 */
 #show-lucky .show-all{display:inline-block;border-radius:8px;margin-top: 170px;padding:20px;background: #fff;color: #000;} /*最后所有中奖号码的区域*/
