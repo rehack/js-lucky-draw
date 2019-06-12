@@ -412,21 +412,15 @@ class Lucky{
         // console.log(this.oLocalStorage.length);//object
         for(let i=1;i<=this.totalTurns;i++){
             if(this.oLocalStorage.getItem(i)){
+                let allData = JSON.parse(this.oLocalStorage.getItem(i))
                 if(this.isShowTurn){
-                    // this.numPwrap.innerHTML+=`<span class="turnShow">第${i}轮：</span>`;
-                    for (var variable in JSON.parse(this.oLocalStorage.getItem(i))) {
-                        this.numPwrap.innerHTML+=`
-                            <div class="show"><span class="turnShow">第${i}轮</span>${variable}：${JSON.parse(this.oLocalStorage.getItem(i))[variable]}</div>
-                        `;
-                        console.log(JSON.parse(this.oLocalStorage.getItem(i)))
-                    }
-                    // this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
+                    allData.map(item => {
+                        this.numPwrap.innerHTML += `<div class="show"><span class="turnShow">第${i}轮</span>${item.title}：${item.num}</div>`
+                    })
                 }else{
-                    for (var variable in JSON.parse(this.oLocalStorage.getItem(i))) {
-                        this.numPwrap.innerHTML+=`
-                            <div class="show">${variable}：${JSON.parse(this.oLocalStorage.getItem(i))[variable]}</div>
-                        `;
-                    }
+                    allData.map(item => {
+                        this.numPwrap.innerHTML += `<div class="show">${item.title}：${item.num}</div>`
+                    })
                 }
             }
 
