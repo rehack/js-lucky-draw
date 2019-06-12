@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>活动抽奖</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="bg"><img src="images/bg.jpg" alt=""></div>
+    <div class="center-box">
+        <!-- <div class="logo"><img src="images/logo.png" alt=""></div> -->
+        <div id="turns-heading"><span id="turns"></span><span id="turns-project"></span></div>
+        <div id="show-lucky"><b>251</b></div>
+        <div class="hide" id="all_nums"></div>
+
+        <audio id="play-music" src="music/run.mp3" loop></audio>
+        <audio id="stop-music" src="music/stop.mp3"></audio>
+    </div>
+    <script src="js/main.js"></script>
+    <!-- <script src="js/es5.js"></script> -->
+    <script>
+        window.onload=function(){
+            if(!window.localStorage){
+                alert('您的浏览器不支持window.localStorage! 请更换最新chrome或Firefox');
+                return false;
+            }
+            var selfNum=[
+                [20],
+                [],
+                [12,15],
+                []
+            ];//每轮内定号码，没有内定号码就设置空数组
+
+            // var selfNum=[];
+            var luckyCount=[
+                []
+            ];
+            var lucky=new Lucky({
+                // 'initNum':[1,300],//参与抽奖号码范围，必须
+                'initNum':[97,98,99,100,101,102,103,104,105,121,122,123,124,125,126,127,128,130,131,132,133,134,135,151,152,153,154,155,156,157,158,159,160,161,163,164,166,181,182,183,185,186,187,188,189],//参与抽奖号码范围，必须
+                'numPwrap':'show-lucky',//必须
+                'turnsWrap':'turns',//轮次标题 显示第几轮 必须
+                'turnsProWrap':'turns-project',//轮次抽奖项目容器 必须
+                // 'smTitle':['200元代金券','300元代金券','500元代金券','免费种植牙'],//轮次小标题 必须
+                /*'smTitle':[
+                    ['免费德国明星全瓷牙','免费德国ICX种植体'],
+                    ['免费德国明星全瓷牙','免费德国ICX种植体'],
+                    ['免费德国明星全瓷牙','免费德国ICX种植体','免费以色列科特斯种植体'],
+                    ['免费德国明星全瓷牙','免费德国ICX种植体','免费ITI种植体']
+                ],//轮次小标题 必须*/
+                'smTitle':[
+                    {
+                        "tit":['免费洁牙','免费补牙'],
+                        "luckyCount":[10,10],//每次抽出来的中奖个数
+                        "selfNum":[]
+                    },
+                    {
+                        "tit":['免费全瓷牙冠'],
+                        "luckyCount":[5],//每次抽出来的中奖个数
+                        "selfNum":[]
+                    },
+                    {
+                        "tit":['免费种植体'],
+                        "luckyCount":[3],//每次抽出来的中奖个数
+                        "selfNum":[]
+                    }
+                ],//没轮抽奖信息配置包括轮次小标题、每轮内定号码、每次抽出的个数
+                'runSpeed':30,//号码滚动速度
+                'isPlay':true,//是否播放音效
+                'isShowTurn':true,//是否显示轮次标题
+                // 'selfNum':selfNum//内定号码
+            });
+            lucky.init();
+        }
+    </script>
+</body>
+</html>
