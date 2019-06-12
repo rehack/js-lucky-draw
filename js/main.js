@@ -397,7 +397,11 @@ class Lucky{
                     }
                     // this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
                 }else{
-                    this.numPwrap.innerHTML+=`<div class="show">${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
+                    for (var variable in JSON.parse(this.oLocalStorage.getItem(i))) {
+                        this.numPwrap.innerHTML+=`
+                            <div class="show">${variable}：${JSON.parse(this.oLocalStorage.getItem(i))[variable]}</div>
+                        `;
+                    }
                 }
             }
 
