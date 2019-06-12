@@ -401,14 +401,6 @@ class Lucky{
             if(this.oLocalStorage.getItem(i)){
                 let allData = JSON.parse(this.oLocalStorage.getItem(i))
                 if(this.isShowTurn){
-                    // this.numPwrap.innerHTML+=`<span class="turnShow">第${i}轮：</span>`;
-                    // for (var variable in ) {
-                    //     this.numPwrap.firstChild.innerHTML+=`
-                    //         <div class="show"><span class="turnShow">第${i}轮</span>${variable}：${JSON.parse(this.oLocalStorage.getItem(i))[variable]}</div>
-                    //     `;
-                    //     console.log(JSON.parse(this.oLocalStorage.getItem(i)))
-                    // }
-                    // this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
                     allData.map(item => {
                         this.numPwrap.firstChild.innerHTML += `<div class="show"><span class="turnShow">第${i}轮</span>${item.title}：${item.num}</div>`
                     })
