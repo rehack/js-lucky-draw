@@ -44,8 +44,9 @@ class Lucky{
     }
 
     init(){
-        // 如果还没有存储参与抽奖号码就进行存储
-        if(!this.oLocalStorage.getItem("sJoinNum")){
+        // 如果还没有存储参与抽奖号码就进行存储 如果是null就表示没有初始化，如果是空字符串就表示号码已经抽取完了,如果是抽取完了就不应该再初始化数据
+        // console.log(typeof(this.oLocalStorage.getItem("sJoinNum")))
+        if(this.oLocalStorage.getItem("sJoinNum") === null){
             if(this.initNum.length==2){//如果是设置的[1,30]这种连续号码段
                 // 得到参与抽奖号码数组
                 let arr=[];
@@ -243,6 +244,7 @@ class Lucky{
             return false;
         }
         this.numPwrap.innerHTML='';
+        console.log(222222)
         this.timer=setInterval(()=>{
             let randomIndex=Math.floor(Math.random()*this.aJoinNum.length);
             console.log(`参与号码：${this.aJoinNum}`);
@@ -389,7 +391,7 @@ class Lucky{
 
     // 显示全部中奖号码
     showAllLucky(){
-        this.numPwrap.innerHTML='';
+        // this.numPwrap.innerHTML='';
         this.numPwrap.innerHTML='<div class="show-all"><div class="show-all-tit">恭喜本次活动所有中奖号码：</div></div>';
         this.turnsProWrap.parentNode.style.display = 'none';
         // console.log(this.oLocalStorage.length);//object
