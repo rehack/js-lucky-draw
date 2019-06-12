@@ -40,7 +40,7 @@ class Lucky{
         this.playM=document.getElementById('play-music');//滚动音效对象
         this.stopM=document.getElementById('stop-music');//停止音效对象
 
-        this.oSave={};//临时存储中奖信息的对象
+        this.oSave=[];//临时存储中奖信息的数组
     }
 
     init(){
@@ -300,28 +300,44 @@ class Lucky{
 
     //将中奖号码进行存储
     saveLuckyNum(num){
-        /*if(!this.oLocalStorage[this.turn]){//如果此轮抽奖结果没有存储就进行存储
-            this.oLocalStorage.setItem(this.turn,num);
+        var tit = this.turnsProWrap.innerHTML;
+        let tmpObj = {}
+        tmpObj.title = tit
+        tmpObj.num = num
+        // console.log(s)
+        if(!this.oLocalStorage[this.turn]){//如果此轮还没有抽过
+            this.oSave = [];
+            // console.log(1)
+
         }else{
-            this.oLocalStorage.setItem(this.turn,`${this.getLocalStorage(this.turn)}、${num}`);
-        }*/
-
-        var s=this.turnsProWrap.innerHTML;
-        if(!this.oLocalStorage[this.turn]){//如果此轮抽奖结果没有存储就进行存储
-            this.oSave={};
-
+            // 表示本轮已经抽过一次或多次了 然后从LocalStorage把之前抽过的数据取出来
+            this.oSave=JSON.parse(this.oLocalStorage[this.turn])
+            // console.log(2)
+            // [
+            //     {
+            //         "title":'',
+            //         num:[1,2,3]
+            //     },
+            //     {
+            //         "title":'',
+            //         num:[1,2,3]
+            //     }
+            // ]
         }
-        if(!this.oSave[s]){
-            this.oSave[s]=[];
-
-            this.oSave[s].push(num);
+        if(!this.oSave[this.pro]){
+            this.oSave[this.pro] = tmpObj
         }else{
-            this.oSave[s].push(num);
+            // 如果本次抽奖已经存到了localStorage表示已经抽过了，相当于额外再增加一次抽奖
+            console.log('已经抽过了')
+            // this.oSave['other'] = tmpObj JSON.stringify不能读关联数组
         }
+        // console.log(this.oSave)
 
 
-        var tmp=JSON.stringify(this.oSave);
-        this.oLocalStorage.setItem(this.turn,tmp);
+        
+        var strtmp=JSON.stringify(this.oSave);
+        // console.log(strtmp)
+        this.oLocalStorage.setItem(this.turn,strtmp);
     }
 
     getLocalStorage(turn){
@@ -334,7 +350,6 @@ class Lucky{
 
     // 将中奖号码填充到页面 && 轮次标题填充
     fill(){
-
         // 切换抽奖轮次
         // console.log(this.smTitle[this.turn-1].tit)
         if(this.smTitle[this.turn-1].tit){
@@ -358,9 +373,13 @@ class Lucky{
         if(this.getLocalStorage(this.turn)){
             // console.log(JSON.parse(this.getLocalStorage(this.turn)))
             this.numPwrap.innerHTML+=`<span class="show">恭喜本轮中奖号码：<br>`;
-            for (var variable in JSON.parse(this.getLocalStorage(this.turn))) {
-                this.numPwrap.innerHTML+=`${variable}：${JSON.parse(this.getLocalStorage(this.turn))[variable]}</span><br>`;
-            }
+            let currentTurnData = JSON.parse(this.getLocalStorage(this.turn))
+            // for (var variable in ) {
+            //     this.numPwrap.innerHTML+=`${variable}：${JSON.parse(this.getLocalStorage(this.turn))[variable]}</span><br>`;
+            // }
+            currentTurnData.map(item => {
+                this.numPwrap.innerHTML += `${item.title}:${item.num}<br>`
+            })
         }else{
 
         }
@@ -376,22 +395,23 @@ class Lucky{
         // console.log(this.oLocalStorage.length);//object
         for(let i=1;i<=this.totalTurns;i++){
             if(this.oLocalStorage.getItem(i)){
+                let allData = JSON.parse(this.oLocalStorage.getItem(i))
                 if(this.isShowTurn){
                     // this.numPwrap.innerHTML+=`<span class="turnShow">第${i}轮：</span>`;
-                    for (var variable in JSON.parse(this.oLocalStorage.getItem(i))) {
-                        this.numPwrap.firstChild.innerHTML+=`
-                            <div class="show"><span class="turnShow">第${i}轮</span>${variable}：${JSON.parse(this.oLocalStorage.getItem(i))[variable]}</div>
-                        `;
-                        console.log(JSON.parse(this.oLocalStorage.getItem(i)))
-                    }
+                    // for (var variable in ) {
+                    //     this.numPwrap.firstChild.innerHTML+=`
+                    //         <div class="show"><span class="turnShow">第${i}轮</span>${variable}：${JSON.parse(this.oLocalStorage.getItem(i))[variable]}</div>
+                    //     `;
+                    //     console.log(JSON.parse(this.oLocalStorage.getItem(i)))
+                    // }
                     // this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
+                    allData.map(item => {
+                        this.numPwrap.firstChild.innerHTML += `<div class="show"><span class="turnShow">第${i}轮</span>${item.title}：${item.num}</div>`
+                    })
                 }else{
-                    for (var variable in JSON.parse(this.oLocalStorage.getItem(i))) {
-                        this.numPwrap.firstChild.innerHTML+=`
-                            <div class="show">${variable}：${JSON.parse(this.oLocalStorage.getItem(i))[variable]}</div>
-                        `;
-                        // console.log(JSON.parse(this.oLocalStorage.getItem(i)))
-                    }
+                    allData.map(item => {
+                        this.numPwrap.firstChild.innerHTML += `<div class="show">${item.title}：${item.num}</div>`
+                    })
                 }
             }
 
