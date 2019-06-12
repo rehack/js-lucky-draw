@@ -396,7 +396,9 @@ class Lucky{
             //     this.numPwrap.innerHTML+=`${variable}：${JSON.parse(this.getLocalStorage(this.turn))[variable]}</span><br>`;
             // }
             currentTurnData.map(item => {
-                this.numPwrap.innerHTML += `${item.title}:${item.num}<br>`
+                if(item){ //判断如果切换的时候有些轮次还没有抽取 item为null
+                    this.numPwrap.innerHTML += `${item.title}:${item.num}<br>`
+                }
             })
         }else{
 
@@ -416,11 +418,15 @@ class Lucky{
                 let allData = JSON.parse(this.oLocalStorage.getItem(i))
                 if(this.isShowTurn){
                     allData.map(item => {
-                        this.numPwrap.innerHTML += `<div class="show"><span class="turnShow">第${i}轮</span>${item.title}：${item.num}</div>`
+                        if(item){
+                            this.numPwrap.innerHTML += `<div class="show"><span class="turnShow">第${i}轮</span>${item.title}：${item.num}</div>`
+                        }
                     })
                 }else{
                     allData.map(item => {
-                        this.numPwrap.innerHTML += `<div class="show">${item.title}：${item.num}</div>`
+                        if(item){
+                            this.numPwrap.innerHTML += `<div class="show">${item.title}：${item.num}</div>`
+                        }
                     })
                 }
             }
