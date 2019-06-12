@@ -47,6 +47,7 @@ class Lucky{
         // 如果还没有存储参与抽奖号码就进行存储 如果是null就表示没有初始化，如果是空字符串就表示号码已经抽取完了,如果是抽取完了就不应该再初始化数据
         // console.log(typeof(this.oLocalStorage.getItem("sJoinNum")))
         if(this.oLocalStorage.getItem("sJoinNum") === null){
+        // if(!this.oLocalStorage.getItem("sJoinNum")){
             if(this.initNum.length==2){//如果是设置的[1,30]这种连续号码段
                 // 得到参与抽奖号码数组
                 let arr=[];
@@ -61,13 +62,13 @@ class Lucky{
                         for(var b=0;b<this.selfNum[a].length;b++){
                             // console(1)
                             this.buquan(this.selfNum[a][b],this.digits);
-                            // console.log(this.selfNum[a][b])
+                            console.log(this.selfNum[a][b])
                             this.removeLuckyNum(this.buquan(this.selfNum[a][b],this.digits),arr);
                             // this.removeLuckyNum[1,arr];
                         }
                     }
                 }
-                // console.log('arr'+arr)
+                console.log('arr'+arr)
                 // let str = JSON.stringify(arr);
                 let str = arr.join(',');
                 localStorage.setItem("sJoinNum",str);
@@ -244,7 +245,6 @@ class Lucky{
             return false;
         }
         this.numPwrap.innerHTML='';
-        console.log(222222)
         this.timer=setInterval(()=>{
             let randomIndex=Math.floor(Math.random()*this.aJoinNum.length);
             console.log(`参与号码：${this.aJoinNum}`);
@@ -262,8 +262,7 @@ class Lucky{
         }
         // alert(this.turn)
         // alert(this.selfNum[this.turn-1])
-        if(this.selfNum.length>0 && this.selfNum[this.turn-1].length>0){
-            // alert(1)
+        if(this.selfNum.length>0 && this.selfNum[this.turn-1].length>0){ //如果有内定的号码
             this.luckyNum=this.buquan(this.getLucky(this.selfNum[this.turn-1]),this.digits);
 
             this.selfNum[this.turn-1]=this.removeLuckyNum(this.luckyNum,this.selfNum[this.turn-1]);//从内定号码数组中移除中奖号码
