@@ -47,7 +47,7 @@ var Lucky = function () {
         this.playM = document.getElementById('play-music'); //滚动音效对象
         this.stopM = document.getElementById('stop-music'); //停止音效对象
 
-        this.oSave = {}; //临时存储中奖信息的对象
+        this.oSave = []; //临时存储中奖信息的数组
     }
 
     _createClass(Lucky, [{
@@ -55,8 +55,9 @@ var Lucky = function () {
         value: function init() {
             var _this = this;
 
-            // 如果还没有存储参与抽奖号码就进行存储
-            if (!this.oLocalStorage.getItem("sJoinNum")) {
+            // 如果还没有存储参与抽奖号码就进行存储 如果是null就表示没有初始化，如果是空字符串就表示号码已经抽取完了,如果是抽取完了就不应该再初始化数据
+            // console.log(typeof(this.oLocalStorage.getItem("sJoinNum")))
+            if (this.oLocalStorage.getItem("sJoinNum") === null) {
                 if (this.initNum.length == 2) {
                     //如果是设置的[1,30]这种连续号码段
                     // 得到参与抽奖号码数组
@@ -124,6 +125,8 @@ var Lucky = function () {
                 // 左右方向键切换抽奖轮次，Ctrl + z清除localStorage
                 switch (oEvent.keyCode || oEvent.ctrlKey) {
                     case 37:
+                        //左键切换上一轮
+                        _this.pro = 0;
                         if (_this.runStatus) {
                             return false; //未停止抽奖不允许进行键盘切换
                         }
@@ -131,9 +134,12 @@ var Lucky = function () {
                         if (_this.turn == 0) {
                             _this.turn = _this.totalTurns;
                         }
+                        // console.log('zuo',this.turn);
                         _this.fill();
                         break;
                     case 39:
+                        //右键切换下一轮
+                        _this.pro = 0;
                         if (_this.runStatus) {
                             return false; //未停止抽奖不允许进行键盘切换
                         }
@@ -144,7 +150,7 @@ var Lucky = function () {
                         _this.fill();
                         break;
                     case 38:
-                        //查询全部中奖记录
+                        //上键查询全部中奖记录
                         if (_this.runStatus) {
                             return false; //未停止抽奖不允许进行键盘切换
                         }
@@ -283,6 +289,8 @@ var Lucky = function () {
             }
             // alert(this.turn)
             // alert(this.selfNum[this.turn-1])
+            // console.log(this.turn,this.pro)
+            // return false
             if (this.selfNum.length > 0 && this.selfNum[this.turn - 1][this.pro]) {
                 var a = this.getLucky(this.aJoinNum, this.smTitle[this.turn - 1].luckyCount[this.pro] - this.selfNum[this.turn - 1][this.pro].length);
                 var luckyNum = [];
@@ -338,27 +346,43 @@ var Lucky = function () {
     }, {
         key: 'saveLuckyNum',
         value: function saveLuckyNum(num) {
-            /*if(!this.oLocalStorage[this.turn]){//如果此轮抽奖结果没有存储就进行存储
-                this.oLocalStorage.setItem(this.turn,num);
-            }else{
-                this.oLocalStorage.setItem(this.turn,`${this.getLocalStorage(this.turn)}、${num}`);
-            }*/
-
-            var s = this.turnsProWrap.innerHTML;
+            var tit = this.turnsProWrap.innerHTML;
+            var tmpObj = {};
+            tmpObj.title = tit;
+            tmpObj.num = num;
+            // console.log(s)
             if (!this.oLocalStorage[this.turn]) {
-                //如果此轮抽奖结果没有存储就进行存储
-                this.oSave = {};
-            }
-            if (!this.oSave[s]) {
-                this.oSave[s] = [];
-
-                this.oSave[s].push(num);
+                //如果此轮还没有抽过
+                this.oSave = [];
+                // console.log(1)
             } else {
-                this.oSave[s].push(num);
+                // 表示本轮已经抽过一次或多次了 然后从LocalStorage把之前抽过的数据取出来
+                this.oSave = JSON.parse(this.oLocalStorage[this.turn]);
+                // console.log(2)
+                // [
+                //     {
+                //         "title":'',
+                //         num:[1,2,3]
+                //     },
+                //     {
+                //         "title":'',
+                //         num:[1,2,3]
+                //     }
+                // ]
             }
+            if (!this.oSave[this.pro]) {
+                this.oSave[this.pro] = tmpObj;
+            } else {
+                // 如果本次抽奖已经存到了localStorage表示已经抽过了，相当于额外再增加一次抽奖
+                console.log('已经抽过了');
+                // this.oSave['other'] = tmpObj JSON.stringify不能读关联数组
+            }
+            // console.log(this.oSave)
 
-            var tmp = JSON.stringify(this.oSave);
-            this.oLocalStorage.setItem(this.turn, tmp);
+
+            var strtmp = JSON.stringify(this.oSave);
+            // console.log(strtmp)
+            this.oLocalStorage.setItem(this.turn, strtmp);
         }
     }, {
         key: 'getLocalStorage',
@@ -375,6 +399,7 @@ var Lucky = function () {
     }, {
         key: 'fill',
         value: function fill() {
+            var _this3 = this;
 
             // 切换抽奖轮次
             // console.log(this.smTitle[this.turn-1].tit)
@@ -399,9 +424,16 @@ var Lucky = function () {
             if (this.getLocalStorage(this.turn)) {
                 // console.log(JSON.parse(this.getLocalStorage(this.turn)))
                 this.numPwrap.innerHTML += '<span class="show">\u606D\u559C\u672C\u8F6E\u4E2D\u5956\u53F7\u7801\uFF1A<br>';
-                for (var variable in JSON.parse(this.getLocalStorage(this.turn))) {
-                    this.numPwrap.innerHTML += variable + '\uFF1A' + JSON.parse(this.getLocalStorage(this.turn))[variable] + '</span><br>';
-                }
+                var currentTurnData = JSON.parse(this.getLocalStorage(this.turn));
+                // for (var variable in ) {
+                //     this.numPwrap.innerHTML+=`${variable}：${JSON.parse(this.getLocalStorage(this.turn))[variable]}</span><br>`;
+                // }
+                currentTurnData.map(function (item) {
+                    if (item) {
+                        //判断如果切换的时候有些轮次还没有抽取 item为null
+                        _this3.numPwrap.innerHTML += item.title + ':' + item.num + '<br>';
+                    }
+                });
             } else {}
         }
 
@@ -410,23 +442,34 @@ var Lucky = function () {
     }, {
         key: 'showAllLucky',
         value: function showAllLucky() {
+            var _this4 = this;
+
             this.numPwrap.innerHTML = '';
             this.numPwrap.innerHTML = '恭喜本次活动所有中奖号码：<br />';
             this.turnsProWrap.parentNode.style.display = 'none';
             // console.log(this.oLocalStorage.length);//object
-            for (var i = 1; i <= this.totalTurns; i++) {
-                if (this.oLocalStorage.getItem(i)) {
-                    if (this.isShowTurn) {
-                        // this.numPwrap.innerHTML+=`<span class="turnShow">第${i}轮：</span>`;
-                        for (var variable in JSON.parse(this.oLocalStorage.getItem(i))) {
-                            this.numPwrap.innerHTML += '\n                            <div class="show"><span class="turnShow">\u7B2C' + i + '\u8F6E</span>' + variable + '\uFF1A' + JSON.parse(this.oLocalStorage.getItem(i))[variable] + '</div>\n                        ';
-                            console.log(JSON.parse(this.oLocalStorage.getItem(i)));
-                        }
-                        // this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
+
+            var _loop = function _loop(i) {
+                if (_this4.oLocalStorage.getItem(i)) {
+                    var allData = JSON.parse(_this4.oLocalStorage.getItem(i));
+                    if (_this4.isShowTurn) {
+                        allData.map(function (item) {
+                            if (item) {
+                                _this4.numPwrap.innerHTML += '<div class="show"><span class="turnShow">\u7B2C' + i + '\u8F6E</span>' + item.title + '\uFF1A' + item.num + '</div>';
+                            }
+                        });
                     } else {
-                        this.numPwrap.innerHTML += '<div class="show">' + this.smTitle[i - 1] + '\u4E2D\u5956\u53F7\u7801\uFF1A' + this.oLocalStorage.getItem(i) + '</div>';
+                        allData.map(function (item) {
+                            if (item) {
+                                _this4.numPwrap.innerHTML += '<div class="show">' + item.title + '\uFF1A' + item.num + '</div>';
+                            }
+                        });
                     }
                 }
+            };
+
+            for (var i = 1; i <= this.totalTurns; i++) {
+                _loop(i);
             }
         }
     }]);
