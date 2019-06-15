@@ -47,7 +47,7 @@ var Lucky = function () {
         this.playM = document.getElementById('play-music'); //滚动音效对象
         this.stopM = document.getElementById('stop-music'); //停止音效对象
 
-        this.oSave = {}; //临时存储中奖信息的对象
+        this.oSave = []; //临时存储中奖信息的数组
     }
 
     _createClass(Lucky, [{
@@ -55,8 +55,9 @@ var Lucky = function () {
         value: function init() {
             var _this = this;
 
-            // 如果还没有存储参与抽奖号码就进行存储
-            if (!this.oLocalStorage.getItem("sJoinNum")) {
+            // 如果还没有存储参与抽奖号码就进行存储 如果是null就表示没有初始化，如果是空字符串就表示号码已经抽取完了,如果是抽取完了就不应该再初始化数据
+            // console.log(typeof(this.oLocalStorage.getItem("sJoinNum")))
+            if (this.oLocalStorage.getItem("sJoinNum") === null) {
                 if (this.initNum.length == 2) {
                     //如果是设置的[1,30]这种连续号码段
                     // 得到参与抽奖号码数组
@@ -65,16 +66,20 @@ var Lucky = function () {
 
                         var j = this.buquan(_i, this.digits); //补全
                         arr.push(j);
+                    }
 
-                        for (var a = 0; a < this.selfNum.length; a++) {
+                    for (var a = 0; a < this.selfNum.length; a++) {
 
-                            for (var b = 0; b < this.selfNum[a].length; b++) {
-                                // console(1)
-                                this.buquan(this.selfNum[a][b], this.digits);
-                                // console.log(this.selfNum[a][b])
-                                this.removeLuckyNum(this.buquan(this.selfNum[a][b], this.digits), arr);
-                                // this.removeLuckyNum[1,arr];
+                        for (var b = 0; b < this.selfNum[a].length; b++) {
+                            // console(1)
+                            for (var c = 0; c < this.selfNum[a][b].length; c++) {
+
+                                this.buquan(this.selfNum[a][b][c], this.digits);
+                                this.removeLuckyNum(this.buquan(this.selfNum[a][b][c], this.digits), arr);
                             }
+                            // console.log(this.selfNum[a][b])
+                            // this.removeLuckyNum(this.buquan(this.selfNum[a][b],this.digits),arr);
+                            // this.removeLuckyNum[1,arr];
                         }
                     }
                     // console.log('arr'+arr)
@@ -189,23 +194,15 @@ var Lucky = function () {
         key: 'removeLuckyNum',
         value: function removeLuckyNum(num, arr) {
             // 数组扩展方法 从数组删除指定元素
-            /*Array.prototype.removeByValue = function(val) {
+            Array.prototype.removeByValue = function (val) {
                 for (var i = 0; i < this.length; i++) {
                     if (this[i] == val) {
                         this.splice(i, 1);
-                        // break;
+                        break;
                     }
                 }
-            }*/
-            for (var i = 0; i <= num.length; i++) {
-                // arr.removeByValue(num[i]);
-                for (var j = 0; j < arr.length; j++) {
-                    if (arr[j] == num[i]) {
-                        arr.splice(j, 1);
-                        // break;
-                    }
-                }
-            }
+            };
+            arr.removeByValue(num);
             return arr;
         }
 
@@ -231,11 +228,15 @@ var Lucky = function () {
                 //判断如果数组还有可以取出的元素,以防下标越界
                 if (temp_array.length > 0) {
                     //在数组中产生一个随机索引
-                    var arrIndex = Math.floor(Math.random() * temp_array.length);
-                    //将此随机索引的对应的数组元素值复制出来
-                    return_array[i] = temp_array[arrIndex];
-                    //然后删掉此索引的数组元素,这时候temp_array变为新的数组
-                    temp_array.splice(arrIndex, 1);
+                    var arrIndex = Math.floor(Math.random() * (temp_array.length - 1));
+                    // console.log('length'+temp_array.length)
+                    // console.log('随机：'+arrIndex)
+                    if (temp_array[arrIndex]) {
+                        //将此随机索引的对应的数组元素值复制出来
+                        return_array[i] = temp_array[arrIndex];
+                        //然后删掉此索引的数组元素,这时候temp_array变为新的数组
+                        temp_array.splice(arrIndex, 1);
+                    }
                 } else {
                     //数组中数据项取完后,退出循环,比如数组本来只有10项,但要求取出20项.
                     break;
@@ -272,6 +273,33 @@ var Lucky = function () {
         }
 
         // 停止号码滚动
+        // stop(){
+        //     clearInterval(this.timer);
+        //     this.runStatus=false;
+        //     if(this.isPlay){
+        //         this.playStopMusic();
+        //     }
+        //     // alert(this.turn)
+        //     // alert(this.selfNum[this.turn-1])
+        //     if(this.selfNum.length>0 && this.selfNum[this.turn-1].length>0){ //如果有内定的号码
+        //         this.luckyNum=this.buquan(this.getLucky(this.selfNum[this.turn-1]),this.digits);
+
+        //         this.selfNum[this.turn-1]=this.removeLuckyNum(this.luckyNum,this.selfNum[this.turn-1]);//从内定号码数组中移除中奖号码
+        //     }else{
+
+        //         this.luckyNum=this.getLucky(this.aJoinNum,this.smTitle[this.turn-1].luckyCount[this.pro]);//随机抽取指定个数的号码 array
+        //     }
+        //     console.log(`中奖号码：${this.luckyNum}`);
+
+
+        //     let arr=this.removeLuckyNum(this.luckyNum,this.aJoinNum);//移除该中奖号码
+
+        //     this.oLocalStorage.setItem('sJoinNum',arr);//出现存储剩余号码，更新参与抽奖号码
+        //     console.log(`抽取后剩余号码：${this.aJoinNum}--个数${this.aJoinNum.length}`);
+        //     this.saveLuckyNum(this.luckyNum);//存储
+        //     this.numPwrap.innerHTML=`<span class="current-lucky-num">${this.luckyNum}</span>`;
+
+        // }
 
     }, {
         key: 'stop',
@@ -283,23 +311,35 @@ var Lucky = function () {
             }
             // alert(this.turn)
             // alert(this.selfNum[this.turn-1])
-            if (this.selfNum.length > 0 && this.selfNum[this.turn - 1].length > 0) {
-                // alert(1)
-                this.luckyNum = this.buquan(this.getLucky(this.selfNum[this.turn - 1]), this.digits);
-
-                this.selfNum[this.turn - 1] = this.removeLuckyNum(this.luckyNum, this.selfNum[this.turn - 1]); //从内定号码数组中移除中奖号码
+            // console.log(this.turn,this.pro)
+            // return false
+            if (this.selfNum.length > 0 && this.selfNum[this.turn - 1][this.pro]) {
+                var a = this.getLucky(this.aJoinNum, this.smTitle[this.turn - 1].luckyCount[this.pro] - this.selfNum[this.turn - 1][this.pro].length);
+                var luckyNum = [];
+                for (var i = 0; i < a.length; i++) {
+                    luckyNum.push(this.buquan(a[i], this.digits));
+                }
+                this.luckyNum = luckyNum.concat(this.selfNum[this.turn - 1][this.pro]);
+                // this.luckyNum=luckyNum;
+                var aa = this.luckyNum;
+                // this.selfNum[this.turn-1][this.pro]=this.removeLuckyNum(this.luckyNum,this.selfNum[this.turn-1]);//从内定号码数组中移除中奖号码
+                this.selfNum[this.turn - 1][this.pro] = []; //从内定号码数组中移除中奖号码
             } else {
 
                 this.luckyNum = this.getLucky(this.aJoinNum, this.smTitle[this.turn - 1].luckyCount[this.pro]); //随机抽取指定个数的号码 array
             }
-            console.log('\u4E2D\u5956\u53F7\u7801\uFF1A' + this.luckyNum);
+            // console.log(`中奖号码：${this.luckyNum}`);
 
-            var arr = this.removeLuckyNum(this.luckyNum, this.aJoinNum); //移除该中奖号码
 
+            for (var i = 0; i < this.luckyNum.length; i++) {
+                var b = this.luckyNum[i];
+                this.removeLuckyNum(this.luckyNum[i], this.aJoinNum); //移除该中奖号码
+            }
+            var arr = this.aJoinNum;
             this.oLocalStorage.setItem('sJoinNum', arr); //出现存储剩余号码，更新参与抽奖号码
             console.log('\u62BD\u53D6\u540E\u5269\u4F59\u53F7\u7801\uFF1A' + this.aJoinNum + '--\u4E2A\u6570' + this.aJoinNum.length);
             this.saveLuckyNum(this.luckyNum); //存储
-            this.numPwrap.innerHTML = '<b>' + this.luckyNum + '</b>';
+            this.numPwrap.innerHTML = '<span class="current-lucky-num">' + this.luckyNum + '</span>';
         }
 
         // 滚动音效
@@ -328,27 +368,42 @@ var Lucky = function () {
     }, {
         key: 'saveLuckyNum',
         value: function saveLuckyNum(num) {
-            /*if(!this.oLocalStorage[this.turn]){//如果此轮抽奖结果没有存储就进行存储
-                this.oLocalStorage.setItem(this.turn,num);
-            }else{
-                this.oLocalStorage.setItem(this.turn,`${this.getLocalStorage(this.turn)}、${num}`);
-            }*/
-
-            var s = this.turnsProWrap.innerHTML;
+            var tit = this.turnsProWrap.innerHTML;
+            var tmpObj = {};
+            tmpObj.title = tit;
+            tmpObj.num = num;
+            // console.log(s)
             if (!this.oLocalStorage[this.turn]) {
-                //如果此轮抽奖结果没有存储就进行存储
-                this.oSave = {};
-            }
-            if (!this.oSave[s]) {
-                this.oSave[s] = [];
-
-                this.oSave[s].push(num);
+                //如果此轮还没有抽过
+                this.oSave = [];
+                // console.log(1)
             } else {
-                this.oSave[s].push(num);
+                // 表示本轮已经抽过一次或多次了 然后从LocalStorage把之前抽过的数据取出来
+                this.oSave = JSON.parse(this.oLocalStorage[this.turn]);
+                // console.log(2)
+                // [
+                //     {
+                //         "title":'',
+                //         num:[1,2,3]
+                //     },
+                //     {
+                //         "title":'',
+                //         num:[1,2,3]
+                //     }
+                // ]
             }
+            if (!this.oSave[this.pro]) {
+                this.oSave[this.pro] = tmpObj;
+            } else {
+                // 如果本次抽奖已经存到了localStorage表示已经抽过了，相当于额外再增加一次抽奖
+                console.log('已经抽过了');
+                // this.oSave['other'] = tmpObj JSON.stringify不能读关联数组
+            }
+            console.log(this.oSave);
 
-            var tmp = JSON.stringify(this.oSave);
-            this.oLocalStorage.setItem(this.turn, tmp);
+            var strtmp = JSON.stringify(this.oSave);
+            // console.log(strtmp)
+            this.oLocalStorage.setItem(this.turn, strtmp);
         }
     }, {
         key: 'getLocalStorage',
@@ -365,6 +420,7 @@ var Lucky = function () {
     }, {
         key: 'fill',
         value: function fill() {
+            var _this3 = this;
 
             // 切换抽奖轮次
             // console.log(this.smTitle[this.turn-1].tit)
@@ -372,7 +428,7 @@ var Lucky = function () {
                 this.pro = 0;
                 if (this.isShowTurn) {
                     // this.turnsProWrap.innerHTML=`第${this.turn}轮：${this.smTitle[this.turn-1][0]}`;
-                    this.turnsWrap.innerHTML = '\u7B2C' + this.turn + '\u8F6E\uFF1A';
+                    this.turnsWrap.innerHTML = '\u7B2C' + this.turn + '\u8F6E';
 
                     this.turnsProWrap.innerHTML = '' + this.smTitle[this.turn - 1].tit[this.pro];
                 } else {
@@ -389,9 +445,16 @@ var Lucky = function () {
             if (this.getLocalStorage(this.turn)) {
                 // console.log(JSON.parse(this.getLocalStorage(this.turn)))
                 this.numPwrap.innerHTML += '<span class="show">\u606D\u559C\u672C\u8F6E\u4E2D\u5956\u53F7\u7801\uFF1A<br>';
-                for (var variable in JSON.parse(this.getLocalStorage(this.turn))) {
-                    this.numPwrap.innerHTML += variable + '\uFF1A' + JSON.parse(this.getLocalStorage(this.turn))[variable] + '</span><br>';
-                }
+                var currentTurnData = JSON.parse(this.getLocalStorage(this.turn));
+                // for (var variable in ) {
+                //     this.numPwrap.innerHTML+=`${variable}：${JSON.parse(this.getLocalStorage(this.turn))[variable]}</span><br>`;
+                // }
+                currentTurnData.map(function (item) {
+                    if (item) {
+                        //判断如果切换的时候有些轮次还没有抽取 item为null
+                        _this3.numPwrap.innerHTML += item.title + ':' + item.num + '<br>';
+                    }
+                });
             } else {}
         }
 
@@ -400,23 +463,34 @@ var Lucky = function () {
     }, {
         key: 'showAllLucky',
         value: function showAllLucky() {
-            this.numPwrap.innerHTML = '';
-            this.numPwrap.innerHTML = '恭喜本次活动所有中奖号码：<br />';
+            var _this4 = this;
+
+            // this.numPwrap.innerHTML='';
+            this.numPwrap.innerHTML = '<div class="show-all"><div class="show-all-tit">恭喜本次活动所有中奖号码：</div></div>';
             this.turnsProWrap.parentNode.style.display = 'none';
             // console.log(this.oLocalStorage.length);//object
-            for (var i = 1; i <= this.totalTurns; i++) {
-                if (this.oLocalStorage.getItem(i)) {
-                    if (this.isShowTurn) {
-                        // this.numPwrap.innerHTML+=`<span class="turnShow">第${i}轮：</span>`;
-                        for (var variable in JSON.parse(this.oLocalStorage.getItem(i))) {
-                            this.numPwrap.innerHTML += '\n                            <div class="show"><span class="turnShow">\u7B2C' + i + '\u8F6E</span>' + variable + '\uFF1A' + JSON.parse(this.oLocalStorage.getItem(i))[variable] + '</div>\n                        ';
-                            console.log(JSON.parse(this.oLocalStorage.getItem(i)));
-                        }
-                        // this.numPwrap.innerHTML+=`<div class="show">第${i}轮${this.smTitle[i-1]}中奖号码：${this.oLocalStorage.getItem(i)}</div>`;
+
+            var _loop = function _loop(i) {
+                if (_this4.oLocalStorage.getItem(i)) {
+                    var allData = JSON.parse(_this4.oLocalStorage.getItem(i));
+                    if (_this4.isShowTurn) {
+                        allData.map(function (item) {
+                            if (item) {
+                                _this4.numPwrap.firstChild.innerHTML += '<div class="show"><span class="turnShow">\u7B2C' + i + '\u8F6E</span>' + item.title + '\uFF1A' + item.num + '</div>';
+                            }
+                        });
                     } else {
-                        this.numPwrap.innerHTML += '<div class="show">' + this.smTitle[i - 1] + '\u4E2D\u5956\u53F7\u7801\uFF1A' + this.oLocalStorage.getItem(i) + '</div>';
+                        allData.map(function (item) {
+                            if (item) {
+                                _this4.numPwrap.firstChild.innerHTML += '<div class="show">' + item.title + '\uFF1A' + item.num + '</div>';
+                            }
+                        });
                     }
                 }
+            };
+
+            for (var i = 1; i <= this.totalTurns; i++) {
+                _loop(i);
             }
         }
     }]);

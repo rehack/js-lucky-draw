@@ -1,0 +1,26 @@
+{
+  "name": "js-lucky-draw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel js/main.js --out-file js/es5.js"
+  },
+  "babel": { "presets": ["env"] },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codesboy/js-lucky-draw.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codesboy/js-lucky-draw/issues"
+  },
+  "homepage": "https://github.com/codesboy/js-lucky-draw#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}
