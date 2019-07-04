@@ -218,17 +218,13 @@ function () {
     key: "buquan",
     value: function buquan(num, length) {
       var numstr = num.toString();
-      var l = numstr.length;
 
-      if (l >= length) {
+      if (numstr.length >= length) {
         return numstr;
       }
 
-      for (var i = 0; i < length - l; i++) {
-        numstr = "0" + numstr; // console.log(numstr)
-      }
-
-      return numstr;
+      var newNumStr = numstr.padStart(length, '0');
+      return newNumStr;
     } //从数组中移除指定值
 
   }, {

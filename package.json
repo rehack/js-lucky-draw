@@ -8,7 +8,9 @@
     "build": "babel ./js/main.js -o ./js/es5.js"
   },
   "babel": {
-    "presets": ["@babel/preset-env"]
+    "presets": [
+      "@babel/preset-env"
+    ]
   },
   "repository": {
     "type": "git",
