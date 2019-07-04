@@ -1,28 +1,30 @@
 {
-    "name": "js-lucky-draw",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "build": "babel ./js/main.js -o ./js/es5.js"
-    },
-    "babel": {
-      "presets": ["@babel/preset-env"]
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/codesboy/js-lucky-draw.git"
-    },
-    "author": "Rehack",
-    "license": "ISC",
-    "bugs": {
-      "url": "https://github.com/codesboy/js-lucky-draw/issues"
-    },
-    "homepage": "https://github.com/codesboy/js-lucky-draw#readme",
-    "devDependencies": {
-      "@babel/cli": "^7.4.4",
-      "@babel/core": "^7.4.5",
-      "@babel/preset-env": "^7.4.5"
-    }
+  "name": "js-lucky-draw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel ./js/main.js -o ./js/es5.js"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codesboy/js-lucky-draw.git"
+  },
+  "author": "Rehack",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codesboy/js-lucky-draw/issues"
+  },
+  "homepage": "https://github.com/codesboy/js-lucky-draw#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5"
   }
+}

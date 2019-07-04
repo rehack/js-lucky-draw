@@ -171,13 +171,9 @@ class Lucky{
     // 补全前导0
     buquan(num,length){
         let numstr = num.toString();
-        let l=numstr.length;
-        if (l>=length) {return numstr;}
-        for(let  i = 0 ;i<length - l;i++){
-            numstr = "0" + numstr;
-            // console.log(numstr)
-        }
-        return numstr;
+        if (numstr.length>=length) {return numstr;}
+        let newNumStr = numstr.padStart(length,'0')
+        return newNumStr;
     }
 
     //从数组中移除指定值
