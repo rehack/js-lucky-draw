@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./assets/js/vue.global.prod.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div v-if="lucky">
+            <template v-for="(item,index) in lucky">
+                <div>{{item.title}}: {{item.lucky}}</div>
+            </template>
+        </div>
+    </div>
+    
+    <script src="./src/main.js"></script>
+</body>
+</html>
