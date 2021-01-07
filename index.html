@@ -10,12 +10,23 @@
 <body>
     <div id="app">
         <div class="logo"></div>
-        <div class="run-nums" v-if="lucky">004</div>
-        <div v-else="lucky" class="">
-            <template v-for="(item,index) in lucky">
-                <div>{{item.title}}: {{item.lucky}}</div>
-            </template>
+        <div class="run-nums" :style="lucky.length?'flex-direction: column;':'' ">
+            <div v-for="(item,index) in config" :key="index">
+                <p class="title">
+                    <span v-show="lucky[index]"><i>🎉</i> 恭喜获得：</span>{{item.title}}<span v-show="lucky[index]"> <i>🎉</i></span>
+                </p>
+                <p class="rolling" v-if="!lucky[index]">{{rollingN[index] || '?'}}</p>
+                <transition name="bounce">
+                    <!-- <p v-else class="lucky-num">{{lucky[index] ? (lucky[index].lucky).join(','):''}}</p> -->
+                    <p v-if="lucky[index]" class="lucky-num">{{(lucky[index].lucky).join(',')}}</p>
+                </transition>
+            </div>
         </div>
+        <!-- <div v-if="lucky" class="">
+            <template v-for="(item,index) in lucky" :key="index">
+                <div>{{item.title}}: {{...(item.lucky)}}--{{item.lucky}}</div>
+            </template>
+        </div> -->
         <!-- <audio id="play-music" src="./assets/music/run.mp3" loop></audio>
         <audio id="stop-music" src="./assets/music/stop.mp3"></audio> -->
     </div>
