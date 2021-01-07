@@ -3,16 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>成都贝臣口腔活动抽奖</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
     <script src="./assets/js/vue.global.prod.js"></script>
 </head>
 <body>
     <div id="app">
-        <div v-if="lucky">
+        <div class="logo"></div>
+        <div class="run-nums" v-if="lucky">004</div>
+        <div v-else="lucky" class="">
             <template v-for="(item,index) in lucky">
                 <div>{{item.title}}: {{item.lucky}}</div>
             </template>
         </div>
+        <!-- <audio id="play-music" src="./assets/music/run.mp3" loop></audio>
+        <audio id="stop-music" src="./assets/music/stop.mp3"></audio> -->
     </div>
     
     <script src="./src/main.js"></script>

@@ -1,0 +1,3 @@
+*{margin: 0;padding: 0;}
+#app{width: 100vw;height: 100vh;background: url(../img/bg.jpg) center;background-size: cover;overflow: hidden;}
+.logo{width: 382px;height: 100px;background: url(../img/logo.png) center; background-size: cover;margin: 100px auto;}
