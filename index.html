@@ -10,15 +10,15 @@
 <body>
     <div id="app">
         <div class="logo"></div>
-        <div class="run-nums" :style="lucky.length?'flex-direction: column;':'' ">
-            <div v-for="(item,index) in config" :key="index">
+        <div class="run-nums" :style="lucky.length && item.round === lucky[index].round?'flex-direction: column;':'' ">
+            <div v-for="(item,index) in roundData" :key="index">
                 <p class="title">
-                    <span v-show="lucky[index]"><i>🎉</i> 恭喜获得：</span>{{item.title}}<span v-show="lucky[index]"> <i>🎉</i></span>
+                    <span v-show="lucky[index] && item.round === lucky[index].round"><i>🎉</i> 恭喜获得：</span>{{item.title}}<span v-show="lucky[index] && item.round === lucky[index].round"> <i>🎉</i></span>
                 </p>
                 <p class="rolling" v-if="!lucky[index]">{{rollingN[index] || '?'}}</p>
                 <transition name="bounce">
                     <!-- <p v-if="lucky[index]" class="lucky-num">{{(lucky[index].lucky).join(',')}}</p> -->
-                    <p v-if="lucky[index]" class="lucky-num">
+                    <p v-if="lucky[index] && item.round === lucky[index].round" class="lucky-num">
                         <span v-for="(n,i) in lucky[index].lucky" :key="i">{{n}}</span>
                     </p>
                 </transition>
