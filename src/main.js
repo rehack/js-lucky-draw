@@ -3,13 +3,14 @@ const App = {
     setup() {
         
         // console.log('setup');
-        const {lucky, newInitNum, config, roundData, rollingN} = useStart()
+        const {lucky, newInitNum, config, roundData, rollingN, localData} = useStart()
         return {
             lucky,
             newInitNum,
             config,
             roundData,
-            rollingN
+            rollingN,
+            localData
         }
     }
 }
@@ -86,38 +87,38 @@ function useNumRolling(arr){
 }
 
 function useStart(){
-    const initNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]
-    // const initNum = [1, 2, 4, 6,8,15,42]
+    // const initNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]
+    const initNum = [1, 2, 3, 4, 5, 6, 7, 8, 9,10]
     const config= [
         {
             'round': 1, //轮次
             'title': '600元现金', //标题
-            'count': 10, //总抽取个数，包括内
+            'count': 2, //总抽取个数，包括内
             'self': ['05'] //内一定要补全0
         },
         {
             'round': 1, //轮次
             'title': '800元现金', //标题
-            'count': 10, //抽取个数
-            'self': ['04', '22']
+            'count': 3, //抽取个数
+            'self': ['04', '02']
         },
         {
             'round': 2, //轮次
             'title': '1000元现金', //标题
-            'count': 8, //抽取个数
+            'count': 2, //抽取个数
             'self': []
         },
         {
             'round': 2, //轮次
             'title': '1500元现金', //标题
-            'count': 5, //抽取个数
-            'self': ['41']
+            'count': 1, //抽取个数
+            'self': ['09']
         },
         {
             'round': 3, //轮次
             'title': '2000元现金', //标题
             'count': 1, //抽取个数
-            'self': ['16']
+            'self': ['10']
         }
     ]
 
@@ -148,7 +149,8 @@ function useStart(){
         newInitNum: newArr,
         config,
         rollingN: Array(config.length), //屏幕上不断滚动的号码
-        roundData: [] //当前轮数据
+        roundData: [], //当前轮数据
+        localData: []
     })
 
     let allSelf = [] //提取所有内号
@@ -169,11 +171,12 @@ function useStart(){
 
     function luckyDraw(e){
         if(e.keyCode == 32 && state){ //按下空格键 开始抽奖
-            if(joinNum.length<config[0].count){  //检测号码是否够用
+            if(joinNum.length<result.roundData[0].count){  //检测号码是否够用
                 alert('已经抽完了') 
                 return false
             }
             console.log('开始',joinNum);
+            window.localStorage.removeItem('flag')
             state = false
             useSwitchPlayBgm(rollingAudio)
             clearInterval(timer)
@@ -208,19 +211,26 @@ function useStart(){
                     window.localStorage.setItem('joinNum',JSON.stringify(joinNum))
                     return false
                 }
-                result.lucky.push({
-                    round: result.roundData[i].round,
-                    title: result.roundData[i].title,
-                    lucky: window.localStorage.getItem('flag')=='over' ? [...useDraw(joinNum,result.roundData[i].count)] : useShuffle([...result.roundData[i].self,...useDraw(joinNum,config[i].count - config[i].self.length)])
-                })
-                result.roundData[i].lucky = window.localStorage.getItem('flag')=='over' ? [...useDraw(joinNum,result.roundData[i].count)] : useShuffle([...result.roundData[i].self,...useDraw(joinNum,config[i].count - config[i].self.length)])
+                
+                result.roundData[i].lucky = window.localStorage.getItem('flag')=='over' ? [...useDraw(joinNum,result.roundData[i].count)] : useShuffle([...result.roundData[i].self,...useDraw(joinNum,result.roundData[i].count - result.roundData[i].self.length)])
+                const temp = {
+                    'round': result.roundData[i].round,
+                    'title': result.roundData[i].title,
+                    'lucky': result.roundData[i].lucky
+                }
+
+                result.lucky.push(temp)
+                let localData = JSON.parse(window.localStorage.getItem('lucky') ) || []
+                localData.push(temp)
+                window.localStorage.setItem('lucky',JSON.stringify(localData)) //抽奖结果存本地
+                
                 i++
                 // console.log('?',joinNum);
             }, 2000);
             
             
         }
-
+        // 按键操作
         switch (true || e.ctrlKey) {
             case (e.keyCode == 90):
                 if(e.ctrlKey) window.localStorage.clear()
@@ -230,6 +240,11 @@ function useStart(){
                 const numkey = String.fromCharCode(e.keyCode)
                 swRound(Number(numkey))
                 console.log(result.roundData);
+                break;
+            case (e.keyCode==38):
+                // console.log()
+                result.localData = JSON.parse(window.localStorage.getItem('lucky'))
+                console.log(result);
                 break;
             default:
                 break;
@@ -242,7 +257,7 @@ function useStart(){
     function swRound(turn=1) {
         const cur = config.filter(i=>i.round==turn)
         // console.log(result.lucky,'result.lucky');
-        console.log(cur);
+        console.log(config,cur);
         result.roundData = cur
         // push
     }
