@@ -109,13 +109,13 @@ function useStart(){
         },
         {
             'round': 2, //轮次
-            'title': '1200元现金', //标题
+            'title': '1500元现金', //标题
             'count': 5, //抽取个数
             'self': ['41']
         },
         {
             'round': 3, //轮次
-            'title': '1500元现金', //标题
+            'title': '2000元现金', //标题
             'count': 1, //抽取个数
             'self': ['16']
         }
@@ -204,6 +204,7 @@ function useStart(){
                     useSwitchPlayBgm(stopAudio)
                     window.localStorage.setItem('flag','over')
                     console.log('结束',joinNum);
+                    console.log('结果',result.roundData);
                     window.localStorage.setItem('joinNum',JSON.stringify(joinNum))
                     return false
                 }
@@ -212,6 +213,7 @@ function useStart(){
                     title: result.roundData[i].title,
                     lucky: window.localStorage.getItem('flag')=='over' ? [...useDraw(joinNum,result.roundData[i].count)] : useShuffle([...result.roundData[i].self,...useDraw(joinNum,config[i].count - config[i].self.length)])
                 })
+                result.roundData[i].lucky = window.localStorage.getItem('flag')=='over' ? [...useDraw(joinNum,result.roundData[i].count)] : useShuffle([...result.roundData[i].self,...useDraw(joinNum,config[i].count - config[i].self.length)])
                 i++
                 // console.log('?',joinNum);
             }, 2000);
@@ -227,6 +229,7 @@ function useStart(){
                 // console.log(e.keyCode);
                 const numkey = String.fromCharCode(e.keyCode)
                 swRound(Number(numkey))
+                console.log(result.roundData);
                 break;
             default:
                 break;
@@ -238,8 +241,10 @@ function useStart(){
     // 轮次切换
     function swRound(turn=1) {
         const cur = config.filter(i=>i.round==turn)
-        console.log(result.lucky);
+        // console.log(result.lucky,'result.lucky');
+        console.log(cur);
         result.roundData = cur
+        // push
     }
     
     return toRefs(result)

@@ -1,13 +1,13 @@
 *{margin: 0;padding: 0;}
+[v-cloak]{display: none;}
 #app{width: 100vw;height: 100vh;background: url(../img/bg.jpg) center;background-size: cover;overflow: hidden;overflow-y: auto;}
 .logo{width: 382px;height: 100px;background: url(../img/logo.png) center; background-size: cover;margin: 15px auto;}
-.run-nums{width: 80%;margin: 0 auto;color: #fff;font-size: 96px;font-weight: bold;text-align: center;display: flex;justify-content: space-around;}
-.run-nums div{min-width:250px;border-radius: 10%;background-color: #facd89;color: #e02020;padding: 10px;margin:10px 5px;}
-.run-nums .title{font-size: 30px;color: #5963e8;background-image: #12c2e9;background-image: -webkit-linear-gradient(to left, #f64f59, #c471ed, #1565C0);background-image: linear-gradient(to left, #f64f59, #c471ed, #1565C0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent; 
-}
-.run-nums .title i{-webkit-text-fill-color: initial}
+.run-nums{width: 80%;margin: 0 auto;color: #fff;font-size: 110px;font-weight: bold;text-align: center;display: flex;justify-content: space-around;}
+.run-nums div{min-width:250px;border-radius: 10%;background-color: #facd89;color: #e02020;padding: 50px 10px;margin:50px 5px;}
+.run-nums .title{font-size: 30px;color: #5963e8;background-image: #12c2e9;background-image: -webkit-linear-gradient(to left, #f64f59, #c471ed, #1565C0);background-image: linear-gradient(to left, #f64f59, #c471ed, #1565C0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom: 15px;}
+.run-nums .title i{-webkit-text-fill-color: initial;}
 .run-nums .rolling{color: #ba27bb;}
-.run-nums .lucky-num{color: #e02020;font-size: 60px;}
+.run-nums .lucky-num{color: #e02020;font-size: 80px;}
 .run-nums .lucky-num span{background: #efefda;margin: 0 4px;padding: 0 1px;border-radius: 4px;}
 .bounce-enter-active {
     animation: bounce-in .8s;
