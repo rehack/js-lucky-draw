@@ -11,12 +11,12 @@
 <body>
     <div id="app">
         <div class="logo"></div>
+        <!-- <p>第{{roundData[0].round}}轮</p> -->
         <div v-if="!localData || localData.length==0" v-cloak class="run-nums" :style="roundData[0].lucky ? 'flex-direction: column;' : '' ">
             <div v-for="(item,index) in roundData" :key="index">
                 <p class="title">
                     <span v-show="item.lucky"><i>🎉</i> 恭喜获得：</span>
-                    <span>{{item.title}}</span>
-                    <span v-show="item.lucky"> <i>🎉</i></span>
+                    <span v-show="item.lucky">{{item.title}}</span>
                 </p>
                 <p class="rolling" v-if="!item.lucky">{{rollingN[index] || '?'}}</p>
                 <transition name="bounce">
@@ -27,9 +27,9 @@
             </div>
         </div>
         <div v-else class="all-result">
-            <p class="tit">本次活动中奖名单</p>
+            <p class="tit">本次活动获奖名单</p>
             <div v-for="(item,index) in localData" class="round" :key="index">
-                <div class="round-tit">{{item.title}}</div>
+                <div class="round-tit">第{{item.round}}轮{{item.title}}</div>
                 <div class="round-lucky">
                     <span v-for="(n,i) in item.lucky" :key="i">{{n}}</span>
                 </div>
