@@ -11,7 +11,7 @@
 <body>
     <div id="app">
         <div class="logo"></div>
-        <!-- <p>第{{roundData[0].round}}轮</p> -->
+        <p v-show="!localData || localData.length==0" class="cur-round-title">第{{roundData[0].round}}轮抽奖</p>
         <div v-if="!localData || localData.length==0" v-cloak class="run-nums" :style="roundData[0].lucky ? 'flex-direction: column;' : '' ">
             <div v-for="(item,index) in roundData" :key="index">
                 <p class="title">
@@ -29,9 +29,11 @@
         <div v-else class="all-result">
             <p class="tit">本次活动获奖名单</p>
             <div v-for="(item,index) in localData" class="round" :key="index">
-                <div class="round-tit">第{{item.round}}轮{{item.title}}</div>
+                <div class="round-tit">{{item[0]}}</div>
                 <div class="round-lucky">
-                    <span v-for="(n,i) in item.lucky" :key="i">{{n}}</span>
+                    <span v-for="(n,i) in item[1]" :key="i">
+                        <span v-for="(x,i1) in n" :key="i1">{{x}}</span>
+                    </span>
                 </div>
                  
             </div>

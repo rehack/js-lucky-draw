@@ -1,7 +1,8 @@
 *{margin: 0;padding: 0;}
 [v-cloak]{display: none;}
 #app{width: 100vw;height: 100vh;background: url(../img/bg.jpg) center;background-size: cover;overflow: hidden;overflow-y: auto;}
-.logo{width: 280px;height: 73px;background: url(../img/logo.png) center; background-size: cover;margin: 15px auto;}
+.logo{width: 280px;height: 73px;background: url(../img/logo.png) center; background-size: cover;margin: 15px 10px;}
+.cur-round-title{text-align: center;font-size: 70px;margin-bottom: 10px;color: goldenrod;}
 .run-nums{width: 80%;margin: 0 auto;color: #fff;font-size: 110px;font-weight: bold;text-align: center;display: flex;justify-content: space-around;}
 .run-nums div{min-width:250px;display:flex;align-items: center;border-radius: 10%;background-color: #facd89;color: #e02020;padding: 10px 15px;margin:8px 5px;}
 .run-nums .title{font-size: 30px;color: #5963e8;background-image: #12c2e9;background-image: -webkit-linear-gradient(to left, #f64f59, #c471ed, #1565C0);background-image: linear-gradient(to left, #f64f59, #c471ed, #1565C0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-right: 15px;}
@@ -27,7 +28,7 @@
     }
 }
 .all-result{text-align: center;margin: 0 auto;width: 90%;}
-.all-result .tit{font-size: 70px;color: #222;}
+.all-result .tit{font-size: 70px;color: goldenrod;}
 .all-result .round{display: flex;margin: 15px 0;align-items: center;}
 .all-result .round-tit{width:350px;background-color: #6253c9;color: #fff;font-size: 40px;border-radius: 4px;padding: 5px 12px;margin-right: 15px;}
 .all-result .round-lucky{color: #666;font-size: 40px;}

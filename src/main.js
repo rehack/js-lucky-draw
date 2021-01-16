@@ -63,10 +63,10 @@ function useSwitchPlayBgm(audio){
             }else{
                 clearInterval(t);
             }
-        },200);
+        },100);
     }else{
         var t = setInterval(function(){
-            v-=0.06;
+            v-=0.1;
             // console.log('v2:'+v);
             if(v>0){
                 audio.volume = v;
@@ -74,16 +74,31 @@ function useSwitchPlayBgm(audio){
                 clearInterval(t);
                 audio.pause();
             }
-        },500);
+        },1500);
     }
     
 }
 
+// 产生随机数
 function useNumRolling(arr){
     // const randomN = ref(null)
     let randomIndex=Math.floor(Math.random()*arr.length);
     randomN = arr[randomIndex]
     return randomN
+}
+// Map结构实现对象数组根据某属性分组
+// https://blog.csdn.net/yk950309/article/details/109049875
+function useGroupBy(array, f) {
+    //初始化 Map, 用来存储键值对
+    let map = new Map()
+ 
+    array.forEach(function (obj) {
+        //根据传入的函数，对数组中的每一个对象产生一个 key值，并将key值相等的对象分为一组
+        let key = f(obj)
+        map.set(key, (map.get(key) || []) )
+        map.get(key).push(obj.lucky)
+    });
+    return map
 }
 
 function useStart(){
@@ -319,10 +334,17 @@ function useStart(){
                 swRound(Number(numkey))
                 console.log(result.roundData);
                 break;
-            case (e.keyCode==38):
+            case (e.keyCode==38): //显示全部结果
                 // console.log()
-                result.localData = JSON.parse(window.localStorage.getItem('lucky'))
-                console.log(result);
+                const localData = JSON.parse(window.localStorage.getItem('lucky'))
+                // 数据分组
+                
+                let map = useGroupBy(localData,item=>item.title)
+                
+                result.localData = [...map]
+                // result.localData = [...map.entries()]
+                // result.localData = map
+                console.log(result.localData);
                 break;
             default:
                 break;
