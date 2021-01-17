@@ -18,7 +18,7 @@
                     <span v-show="item.lucky"><i>🎉</i> 恭喜获得：</span>
                     <span v-show="item.lucky">{{item.title}}</span>
                 </p>
-                <p class="rolling" v-if="!item.lucky">{{rollingN[index] || '?'}}</p>
+                <p class="rolling" v-if="!item.lucky">{{rollingN[index] || ' '}}</p>
                 <transition name="bounce">
                     <p v-if="item.lucky" class="lucky-num">
                         <span v-for="(n,i) in item.lucky" :key="i">{{n}}</span>

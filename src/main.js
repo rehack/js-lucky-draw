@@ -108,110 +108,93 @@ function useStart(){
         {
             'round': 1, //轮次
             'title': '600元现金', //标题
-            'count': 5, //总抽取个数，包括内
-            'self': ['03','10','19','15','27'] //内一定要补全0
+            'count': 5, //总抽取个数
+            'self': [] //补全0
         },
         {
             'round': 1, //轮次
             'title': '800元现金', //标题
             'count': 1, //抽取个数
-            'self': ['22']
         },
         {
             'round': 1, //轮次
             'title': '1200元现金', //标题
             'count': 1, //抽取个数
-            'self': ['11']
         },
         {
             'round': 1, //轮次
             'title': '2000元现金', //标题
             'count': 1, //抽取个数
-            'self': ['07']
         },
         {
             'round': 2, //轮次
             'title': '600元现金', //标题
-            'count': 5, //总抽取个数，包括内
-            'self': ['04','24','32','33','29']
+            'count': 5,
         },
         {
             'round': 2, //轮次
             'title': '800元现金', //标题
             'count': 1, //抽取个数
-            'self': ['01']
         },
         {
             'round': 2, //轮次
             'title': '1000元现金', //标题
             'count': 1, //抽取个数
-            'self': ['08']
         },
         {
             'round': 2, //轮次
             'title': '1500元现金', //标题
             'count': 1, //抽取个数
-            'self': ['14']
         },
         {
             'round': 3, //轮次
             'title': '600元现金', //标题
             'count': 4, //总抽取个数，包括内
-            'self': ['06','09','26','28']
         },
         {
             'round': 3, //轮次
             'title': '800元现金', //标题
             'count': 1, //抽取个数
-            'self': ['20']
         },
         {
             'round': 3, //轮次
             'title': '1000元现金', //标题
             'count': 1, //抽取个数
-            'self': ['13']
         },
         {
             'round': 3, //轮次
             'title': '1200元现金', //标题
             'count': 1, //抽取个数
-            'self': ['18']
         },
         {
             'round': 3, //轮次
             'title': '1500元现金', //标题
             'count': 1, //抽取个数
-            'self': ['25']
         },
         {
             'round': 4, //轮次
             'title': '600元现金', //标题
             'count': 5, //抽取个数
-            'self': ['16','23','30','31','34']
         },
         {
             'round': 4, //轮次
             'title': '800元现金', //标题
             'count': 1, //抽取个数
-            'self': ['12']
         },
         {
             'round': 4, //轮次
             'title': '1200元现金', //标题
             'count': 1, //抽取个数
-            'self': ['17']
         },
         {
             'round': 4, //轮次
             'title': '2000元现金', //标题
             'count': 2, //抽取个数
-            'self': ['02','21']
         },
         {
             'round': 5, //轮次
             'title': '5000元锦鲤大奖', //标题
             'count': 1, //抽取个数
-            'self': ['05']
         }
     ]
 
@@ -246,11 +229,11 @@ function useStart(){
         localData: []
     })
 
-    let allSelf = [] //提取所有内号
+    let allSelf = []
     for (let item of config) {
-        allSelf = allSelf.concat(item.self)
+        allSelf = item.self ? allSelf.concat(item.self) : []
     }
-    let joinNum = window.localStorage.getItem('joinNum') ? JSON.parse(window.localStorage.getItem('joinNum')) : []; //剔除内号 得到真实参与抽奖的号码
+    let joinNum = window.localStorage.getItem('joinNum') ? JSON.parse(window.localStorage.getItem('joinNum')) : []; //得到参与抽奖的号码
 
     if(!window.localStorage.getItem('joinNum')){
         newArr.forEach( v => {
@@ -305,7 +288,19 @@ function useStart(){
                     return false
                 }
                 
-                result.roundData[i].lucky = window.localStorage.getItem('flag')=='over' ? [...useDraw(joinNum,result.roundData[i].count)] : useShuffle([...result.roundData[i].self,...useDraw(joinNum,result.roundData[i].count - result.roundData[i].self.length)])
+                // console.log([...useDraw(joinNum,result.roundData[i].count)]);
+                let currSelf = []
+                if(result.roundData[i].self && result.roundData[i].self.length){
+                    currSelf = result.roundData[i].self
+                }
+                result.roundData[i].lucky = window.localStorage.getItem('flag')=='over' ? 
+                    [...useDraw(joinNum,result.roundData[i].count)] : 
+                    useShuffle(
+                        [
+                            ...currSelf,
+                            ...useDraw(joinNum,result.roundData[i].count - currSelf.length)
+                        ]
+                    )
                 const temp = {
                     'round': result.roundData[i].round,
                     'title': result.roundData[i].title,
@@ -319,7 +314,7 @@ function useStart(){
                 
                 i++
                 // console.log('?',joinNum);
-            }, 2500);
+            }, 300);
             
             
         }
