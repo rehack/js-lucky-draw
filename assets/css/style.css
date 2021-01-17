@@ -7,7 +7,7 @@
 .run-nums div{min-width:250px;display:flex;align-items: center;border-radius: 10%;background-color: #facd89;color: #e02020;padding: 10px 15px;margin:8px 5px;}
 .run-nums .title{font-size: 30px;color: #5963e8;background-image: #12c2e9;background-image: -webkit-linear-gradient(to left, #f64f59, #c471ed, #1565C0);background-image: linear-gradient(to left, #f64f59, #c471ed, #1565C0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-right: 15px;}
 .run-nums .title i{-webkit-text-fill-color: initial;}
-.run-nums .rolling{color: #ba27bb;margin: 0 auto;}
+.run-nums .rolling{color: #ba27bb;margin: 0 auto;min-height: 180px;}
 .run-nums .lucky-num{color: #e02020;font-size: 70px;word-wrap:break-word;}
 .run-nums .lucky-num span{display:inline-block;background: #efefda;margin: 5px;padding: 0 5px;border-radius: 8px;}
 .bounce-enter-active {

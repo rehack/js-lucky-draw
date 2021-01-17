@@ -74,7 +74,7 @@ function useSwitchPlayBgm(audio){
                 clearInterval(t);
                 audio.pause();
             }
-        },1500);
+        },200);
     }
     
 }
@@ -109,7 +109,7 @@ function useStart(){
             'round': 1, //轮次
             'title': '600元现金', //标题
             'count': 5, //总抽取个数
-            'self': [] //补全0
+            'self': ['51'] //补全0
         },
         {
             'round': 1, //轮次
@@ -119,7 +119,8 @@ function useStart(){
         {
             'round': 1, //轮次
             'title': '1200元现金', //标题
-            'count': 1, //抽取个数
+            'count': 2, //抽取个数
+            'self': ['15']
         },
         {
             'round': 1, //轮次
@@ -314,7 +315,7 @@ function useStart(){
                 
                 i++
                 // console.log('?',joinNum);
-            }, 300);
+            }, 200);
             
             
         }
