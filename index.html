@@ -9,14 +9,10 @@
 <body>
     <div class="bg"><img src="images/bg.jpg" alt=""></div>
     <div class="center-box">
-        <div class="logo"><img src="images/logo.png" alt=""></div>
+        <!-- <div class="logo"><img src="images/logo.png" alt=""></div> -->
         <div id="turns-heading"><span id="turns"></span><span id="turns-project"></span></div>
         <div id="show-lucky"><b>036</b></div>
         <div class="hide" id="all_nums"></div>
-        <div class="qrcode">
-            <img src="images/qrcode.jpg">
-            <p>扫我了解更多优惠</p>
-        </div>
         <audio id="play-music" src="music/run.mp3" loop></audio>
         <audio id="stop-music" src="music/stop.mp3"></audio>
     </div>
@@ -28,18 +24,18 @@
                 alert('您的浏览器不支持window.localStorage! 请更换最新chrome或Firefox');
                 return false;
             }
-            var selfNum=[
-                [[],['015']],
-                [['023'],['027']],
-                [['038'],[]],
-                []
-            ];//每轮内定号码，没有内定号码就设置空数组
-
+            // var selfNum=[
+            //     [['15']],
+            //     [['23'],['27']],
+            //     [['36'],[]],
+            //     []
+            // ];//每轮内定号码，没有内定号码就设置空数组
+            var selfNum = []
             var luckyCount=[
                 []
             ];
             var lucky=new Lucky({
-                'initNum':[1,130],//参与抽奖号码范围，必须
+                'initNum':[1,45],//参与抽奖号码范围，必须
                 // 'initNum':[1,34,2,5,78,24,88,89,31,90,22,109,300,36,63,65,67,68,69,70,71,72,73,74,75,76,77,79,301],//参与抽奖号码范围，必须
                 'numPwrap':'show-lucky',//必须
                 'turnsWrap':'turns',//轮次标题 显示第几轮 必须
@@ -53,26 +49,37 @@
                 ],//轮次小标题 必须*/
                 'smTitle':[
                     {
-                        "tit":['1-0','1-1'],
-                        "luckyCount":[2,20],//每次抽出来的中奖个数
-                        "selfNum":[[8],[19]]
+                        "tit":['腰托','冲牙器'],
+                        "luckyCount":[5,3],//每次抽出来的中奖个数
+                        "selfNum":[],
+                        "roundInitNum":[1,30], // 
+                        "round_id": "round1"  // 唯一标识，确保不冲突
                     },
                     {
-                        "tit":['2-0','2-1'],
-                        "luckyCount":[2,6],//每次抽出来的中奖个数
-                        "selfNum":[]
-                    },
-                    {
-                        "tit":['3-0','3-1'],
+                        "tit":['免费洁牙','舒适化镇痛项目体验名额'],
                         "luckyCount":[3,5],//每次抽出来的中奖个数
-                        "selfNum":[]
+                        "selfNum":[],
+                        // "selfNum":[[42],[36]],
+                        "roundInitNum":[31,45], // 
+                        "round_id": "round2"  // 唯一标识，确保不冲突
                     },
                     {
-                        "tit":['4-0','4-1'],
-                        "luckyCount":[20,12],//每次抽出来的中奖个数
-                        "selfNum":[]
+                        "tit":['腰托','冲牙器'],
+                        "luckyCount":[2,2],//每次抽出来的中奖个数
+                        "selfNum":[],
+                        // "roundInitNum":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50], // 使用离散号码列表
+                        "roundInitNum":[1,45],
+                        "round_id": "round3"  // 唯一标识，确保不冲突
+                    },
+                    {
+                        "tit":['免费种植体'],
+                        "luckyCount":[1],//每次抽出来的中奖个数
+                        "selfNum":[],
+                        "roundInitNum":[31,45], // 红色号码区间
+                        "round_id": "round4"  // 唯一标识，确保不冲突
                     }
                 ],//没轮抽奖信息配置包括轮次小标题、每轮内定号码、每次抽出的个数
+                'digits':2, // 中奖号码显示的位数，不足位数补0
                 'runSpeed':30,//号码滚动速度
                 'isPlay':true,//是否播放音效
                 'isShowTurn':true,//是否显示轮次标题

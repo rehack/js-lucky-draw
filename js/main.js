@@ -25,7 +25,7 @@ class Lucky{
 
 
 
-        this.digits=this.initNum[this.initNum.length-1].toString().length;//中奖号码显示的位数
+        this.digits=params.digits || this.initNum[this.initNum.length-1].toString().length;//中奖号码显示的位数
         this.aJoinNum=[];
         this.totalTurns=this.smTitle.length;//总抽奖轮次
         this.luckyNum=null;//中奖号码
@@ -191,12 +191,65 @@ class Lucky{
         return arr;
     }
 
+    // 从数组 a 中移除数组 b 中的元素
+    arrRemove(arrA,arrB) {
+        // 定义数组
+        // const b = ["14", "09", "01"];
+        // const a = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
+
+        // 使用 filter 方法移除数组 a 中的元素
+        if(arrB){
+            return arrA.filter(item => !arrB.includes(item));
+        }
+        return arrA;
+
+    }
+    // 生成参与抽奖号码池
+    generateNumbers(roundInitNum){
+        // let roundNumbers = [];
+        // if(roundInitNum.length == 2){ // 连续号码范围
+        //     for(let j = roundStartNum; j <= roundEndNum; j++){
+        //         let formattedNum = this.buquan(j, digits);
+        //         roundNumbers.push(formattedNum);
+        //     }
+        // }
+
+        // 获取当前轮次的位数设置
+        let digits = this.digits;
+                
+        
+        let roundNumbers = [];
+        let roundStartNum = roundInitNum[0];
+        let roundEndNum = roundInitNum[1];
+        
+        if(roundInitNum.length == 2){ // 连续号码范围
+            for(let j = roundStartNum; j <= roundEndNum; j++){
+                let formattedNum = this.buquan(j, digits);
+                roundNumbers.push(formattedNum);
+            }
+        } else { // 离散号码列表
+            for(let j = 0; j < roundInitNum.length; j++){
+                roundNumbers.push(this.buquan(roundInitNum[j], digits));
+            }
+        }
+
+        // 移除已经抽取过的号码和内定号码
+        const allLuckyNum = JSON.parse(this.oLocalStorage.getItem('allLuckyNum'));
+        roundNumbers = this.arrRemove(roundNumbers,allLuckyNum)
+
+        const selfNum = this.selfNum.flat(Infinity).filter(Boolean); //数组扁平化
+        console.log('self',selfNum);
+        roundNumbers = this.arrRemove(roundNumbers,selfNum)
+       
+
+        return roundNumbers;
+    }
 
     /**
      * [getLucky 从参与抽奖号码中随机获取中奖号码]
      * @return {[number]} [带前导0的数字]
      */
-    getLucky(arr,count){
+    getLucky1(arr,count){
         /*let randomNum=Math.floor(Math.random() * arr.length);//随机抽取指定个数的号码
         // alert(arr[randomNum]);
         return arr[randomNum];*/
@@ -229,7 +282,22 @@ class Lucky{
         return return_array;
     }
 
-
+    // 洗牌算法随机抽取指定数量的数组元素
+    getLucky(arr, count) {
+        // 复制原数组避免修改
+        const shuffled = [...arr]; 
+        // 洗牌算法（Fisher-Yates）
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        
+        console.log('fish',shuffled);
+        
+        // 返回指定数量的元素
+        return count > 0 ? shuffled.slice(0, count) : [];
+    }
+  
 
     // 开始滚动号码效果
     run(){
@@ -248,7 +316,7 @@ class Lucky{
         this.numPwrap.innerHTML='';
         this.timer=setInterval(()=>{
             let randomIndex=Math.floor(Math.random()*this.aJoinNum.length);
-            console.log(`参与号码：${this.aJoinNum}`);
+            // console.log(`参与号码：${this.aJoinNum}`);
             this.numPwrap.innerHTML=`<b>${this.aJoinNum[randomIndex]}</b>`; //号码不断滚动
         },this.runSpeed);
 
@@ -265,8 +333,14 @@ class Lucky{
         // alert(this.selfNum[this.turn-1])
         // console.log(this.turn,this.pro)
         // return false
+        let oJoinNum =this.smTitle[this.turn-1].roundInitNum;
+        console.log('原始参与号码',oJoinNum);
+        let realJoinNum=this.generateNumbers(oJoinNum)
+        console.log('过滤后的参与号码',realJoinNum);
+        
+        
         if(this.selfNum.length>0 && this.selfNum[this.turn-1][this.pro]){
-            var a = this.getLucky(this.aJoinNum,this.smTitle[this.turn-1].luckyCount[this.pro]-this.selfNum[this.turn-1][this.pro].length);
+            var a = this.getLucky(realJoinNum,this.smTitle[this.turn-1].luckyCount[this.pro]-this.selfNum[this.turn-1][this.pro].length);
             var luckyNum =[];
             for(var i=0;i<a.length;i++){
                 luckyNum.push(this.buquan(a[i],this.digits));
@@ -278,7 +352,7 @@ class Lucky{
             this.selfNum[this.turn-1][this.pro]=[];//从内定号码数组中移除中奖号码
         }else{
 
-            this.luckyNum=this.getLucky(this.aJoinNum,this.smTitle[this.turn-1].luckyCount[this.pro]);//随机抽取指定个数的号码 array
+            this.luckyNum=this.getLucky(realJoinNum,this.smTitle[this.turn-1].luckyCount[this.pro]);//随机抽取指定个数的号码 array
         }
         // console.log(`中奖号码：${this.luckyNum}`);
 
@@ -290,10 +364,21 @@ class Lucky{
         }
         var arr=this.aJoinNum;
         this.oLocalStorage.setItem('sJoinNum',arr);//出现存储剩余号码，更新参与抽奖号码
-        console.log(`抽取后剩余号码：${this.aJoinNum}--个数${this.aJoinNum.length}`);
+        // console.log(`抽取后剩余号码：${this.aJoinNum}--个数${this.aJoinNum.length}`);
         this.saveLuckyNum(this.luckyNum);//存储
         this.numPwrap.innerHTML=`<b>${this.luckyNum}</b>`;
 
+        // 检查中奖号码是否有重复
+        const findDuplicates=function(arr) {
+            const seen = new Set();
+            return arr.filter(item => 
+              seen.has(item) || !seen.add(item)
+            );
+          
+        }
+        const allL = JSON.parse(this.oLocalStorage.getItem('allLuckyNum'));
+        console.log(`所有中奖号码：${allL}`,`重复号:${findDuplicates(allL)}`);
+        
     }
 
     // 滚动音效
@@ -351,6 +436,14 @@ class Lucky{
         var strtmp=JSON.stringify(this.oSave);
         // console.log(strtmp)
         this.oLocalStorage.setItem(this.turn,strtmp);
+
+        // 存储所有中奖号码
+        let allLuckyNum = JSON.parse(this.oLocalStorage.getItem('allLuckyNum')) || [];
+        allLuckyNum.push(...num);
+        // console.log(allLuckyNum,num);
+        
+        this.oLocalStorage.setItem('allLuckyNum',JSON.stringify(allLuckyNum));
+        // console.log(this.oLocalStorage.getItem('allLuckyNum'),num);
     }
 
     getLocalStorage(turn){
